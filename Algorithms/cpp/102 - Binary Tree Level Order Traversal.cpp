@@ -9,30 +9,25 @@
  */
 class Solution {
 public:
+    // var
+    vector<vector<int>> result;
     vector<vector<int>> levelOrder(TreeNode* root) {
-        // var
-        vector<int> merge;
-        vector<vector<int>> result;
-        
-        if (!root)
-            return result;
-        
-        // init
-        result.push_back(vector<int>(1, root->val));
-        
-        // next level
-        vector<vector<int>> left = levelOrder(root->left);;
-        vector<vector<int>> right = levelOrder(root->right);;
-        
-        // merge subtree
-        for (int i = 0; i < max(left.size(), right.size()); i++) {
-            if (left.size() > i)
-                merge.insert(merge.end(), left[i].begin(), left[i].end());
-            if (right.size() > i)
-                merge.insert(merge.end(), right[i].begin(), right[i].end());
-            result.push_back(merge);
-            merge.clear();
-        }
+        traversal(root, 0);
         return result;
+    }
+    
+    void traversal(TreeNode* root, int level) {
+        if (!root)
+            return;
+            
+        // init
+        if (result.empty() || level > result.size() - 1)
+            result.push_back(vector<int>());
+        
+        // add
+        result[level].push_back(root->val);
+        
+        traversal(root->left, level + 1);
+        traversal(root->right, level + 1);
     }
 };
