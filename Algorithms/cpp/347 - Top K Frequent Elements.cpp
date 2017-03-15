@@ -1,27 +1,30 @@
-// var
-map<int, int> m;
-
-bool compare(int x, int y) {
-    return m[x] > m[y];
+bool compare(pair<int, int> x, pair<int, int> y) {
+    return x.second > y.second;
 }
 
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         // init
-        m.clear();
+        sort(nums.begin(), nums.end());
         
-        for (int i = 0; i < nums.size();) {
-            if (m.find(nums[i]) == m.end()) {
-                m[nums[i]] = 1;
-                i++;
-            }
-            else {
-                m[nums[i]]++;
-                nums.erase(nums.begin() + i);
-            }
+        // var
+        vector<int> result;
+        vector<pair<int, int>> v(1, pair<int, int>(nums[0], 1));
+        
+        for (int i = 1; i < nums.size(); i++) {
+            if (v[v.size() - 1].first != nums[i])
+                v.push_back(pair<int, int>(nums[i], 1));
+            else
+                v[v.size() - 1].second++;
         }
-        sort(nums.begin(), nums.end(), compare);
-        return vector<int>(nums.begin(), nums.begin() + k);
+        
+        sort(v.begin(), v.end(), compare);
+        
+        // format
+        for (int i = 0; i < k; i++)
+            result.push_back(v[i].first);
+
+        return result;
     }
 };
