@@ -2,52 +2,48 @@ class Solution {
 public:
     string replaceWords(vector<string>& dict, string sentence) {
         // var
-        int cache[26];
-        vector<string> tmp;
-        string result = "";
+        string result;
+        vector<string> s;
+        vector<string> v[26];
         
-        // init
+        for (int i = 0; i < dict.size(); i++)
+            v[dict[i][0] - 'a'].push_back(dict[i]);
         for (int i = 0; i < 26; i++)
-            cache[i] = INT_MAX;
-        sort(dict.begin(), dict.end());
-        
-        // remove duplicate
-        for (int i = 0; i < dict.size(); i++) {
-            for (int j = i + 1; j < dict.size(); ) {
-                if (dict[i] == dict[j].substr(0, dict[i].length()))
-                    dict.erase(dict.begin() + j);
-                else
-                    break;
-            }
+            sort(v[i].begin(), v[i].end());
+     
+        // divide
+        for (int i = 0; i < sentence.length(); ) {
+            // var
+            size_t end = sentence.find(" ", i + 1);
+            
+            s.push_back(sentence.substr(i, end - i));
+            
+            if (end == string::npos)
+                break;
+            
+            i = end + 1;
         }
-        
-        // cache by first char
-        for (int i = 0; i < dict.size(); i++) {
-            cache[dict[i][0] - 'a'] = min(cache[dict[i][0] - 'a'], i);
-        }
-        
-        // to vector
-        istringstream iss(sentence);
-        for(string s; iss >> s; )
-            tmp.push_back(s);
         
         // replace
-        for (int i = 0; i < tmp.size(); i++) {
-            for (int j = cache[tmp[i][0] - 'a']; j < dict.size(); j++) {
-                if (tmp[i][0] != dict[j][0])
-                    break;
-                
-                if (tmp[i].substr(0, dict[j].length()) == dict[j]) {
-                    tmp[i] = dict[j];
-                    break;
+        for (int i = 0; i < s.size(); i++) {
+            for (int j = 0; j < v[s[i][0] - 'a'].size(); j++) {
+                // var
+                int count = 0;
+                for (; count < v[s[i][0] - 'a'][j].length(); count++) {
+                    if (s[i][count] != v[s[i][0] - 'a'][j][count])
+                        break;
                 }
+                
+                if (count == v[s[i][0] - 'a'][j].length())
+                    s[i] = v[s[i][0] - 'a'][j];
             }
         }
         
-        // restore from vector
-        for (int i = 0; i < tmp.size(); i++)
-            result += " " + tmp[i];
+        // restore
+        result = s[0];
+        for (int i = 1; i < s.size(); i++)
+            result += " " + s[i];
         
-        return result[0] == ' ' ? result.substr(1) : result;
+        return result;
     }
 };
