@@ -5,7 +5,7 @@ public:
         int result = 0;
         
         while (x || y) {
-            result += (x % 2 xor y % 2);
+            result += (x & 1 xor y & 2);
             x >>= 1;
             y >>= 1;
         }
