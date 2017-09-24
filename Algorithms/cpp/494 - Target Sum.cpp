@@ -1,18 +1,20 @@
 class Solution {
 public:
     int findTargetSumWays(vector<int>& nums, int S) {
-        // var
-        int count = 0;
-        helper(nums, S, 0, count);
-        return count;
+        helper(nums, 0, S);
+        return result;
     }
+private:
+    // var
+    int result = 0;
     
-    void helper(vector<int>& nums, int S, int start, int& count) {
-        if (start >= nums.size()) {
-            count += S == 0;
+    void helper(vector<int>& nums, int start, int S) {
+        if (start == nums.size()) {
+            if (S == 0)
+                ++result;
             return;
         }
-        helper(nums, S + nums[start], start + 1, count);
-        helper(nums, S - nums[start], start + 1, count);
+        helper(nums, start + 1, S + nums[start]);
+        helper(nums, start + 1, S - nums[start]);
     }
 };
