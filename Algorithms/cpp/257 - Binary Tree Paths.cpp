@@ -10,33 +10,27 @@
 class Solution {
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
-        if (!root)
-            return result;
-            
-        traversal(root->left, to_string(root->val));
-        traversal(root->right, to_string(root->val));
+        // var
+        vector<string> result;
         
-        if (result.size() == 0)
-            return vector<string>{ "1" };
-            
-        return result;
-    }
-    
-    void traversal(TreeNode* root, string path) {
         if (!root)
-            return;
-        
+            return vector<string>();
         if (!root->left && !root->right)
-            result.push_back(path + "->" + to_string(root->val));
-        
-        path += "->" + to_string(root->val);
-        
+            return vector<string>({ to_string(root->val) });
         if (root->left)
-            traversal(root->left, path);
+            helper(root->left, to_string(root->val), result);
         if (root->right)
-            traversal(root->right, path);
+            helper(root->right, to_string(root->val), result);
+        
+        return result;        
     }
     
-    // var
-    vector<string> result;
+    void helper(TreeNode* root, string tmp, vector<string>& r) {
+        if (!root->left && !root->right)
+            r.push_back(tmp + "->" + to_string(root->val));
+        if (root->left)
+            helper(root->left, tmp + "->" + to_string(root->val), r);
+        if (root->right)
+            helper(root->right, tmp + "->" + to_string(root->val), r);
+    }
 };

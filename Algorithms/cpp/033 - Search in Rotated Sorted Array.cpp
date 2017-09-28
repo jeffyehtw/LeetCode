@@ -1,50 +1,39 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        if (nums.size() == 0)
+        if (nums.empty())
             return -1;
+        else if (target == nums[0])
+            return 0;
         
         // var
-        int index = -1;
+        int mid = - 1;
         
-        // init
-        for (int i = 0; i < nums.size() - 1; i++) {
-            if (nums[i] > nums[i + 1]) {
-                index = i;
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i - 1] > nums[i]) {
+                mid = i;
                 break;
             }
         }
         
-        if (nums[0] > target) {
-            vector<int> v(nums.begin() + index + 1, nums.end());
-            int result = index > -1 ? binary_search(v, target) : binary_search(nums, target);
-            return result == -1 ? -1 : result + index + 1;
+        if (mid == -1) {
+            return _search(0, nums.size() - 1, nums, target);
         }
-        else if (nums[0] < target) {
-            vector<int> v(nums.begin(), nums.begin() + index + 1);
-            int result = index > -1 ? binary_search(v, target) : binary_search(nums, target);
-            return result == -1 ? -1 : result;
-        }
-        else {
-            return 0;
-        }
+                
+        return target > nums[0] ? _search(0, mid - 1, nums, target) : _search(mid, nums.size() - 1, nums, target);
     }
     
-    int binary_search(vector<int> nums, int target) {
-        // var
-        int left = 0;
-        int right = nums.size() - 1;
-        
+    int _search(int left, int right, vector<int> nums, int target) {
         while (left <= right) {
             // var
-            int middle = (left + right) / 2;
+            int mid = (left + right) / 2;
             
-            if (nums[middle] == target)
-                return middle;
-            else if (nums[middle] > target)
-                right = middle - 1;
+            if (nums[mid] == target)
+                return mid;
+            else if (nums[mid] > target)
+                right = mid - 1;
             else
-                left = middle + 1;
+                left = mid + 1;
         }
         return -1;
     }

@@ -9,28 +9,26 @@
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
-        if (!head)
-            return NULL;
-            
         // var
-        ListNode* new_head = new ListNode(0);
-        ListNode* it = new_head;
-        
+        ListNode* dummy = new ListNode(0);
+        ListNode* index = dummy;
+
         // init
-        new_head->next = head;
+        dummy->next = head;
         
-        while (it && it->next && it->next->next) {
+        while (index->next && index->next->next) {
             // var
-            ListNode* a = it->next;
-            ListNode* b = it->next->next;
+            ListNode* front = index->next;
+            ListNode* back = index->next->next;
+            ListNode* tmp = back->next;
             
-            a->next = b->next;
-            b->next = a;
-            it->next = b;
+            index->next = back;
+            back->next = front;
+            front->next = tmp;
             
-            // next round
-            it = it->next->next;
+            index = index->next->next;
         }
-        return new_head->next;
+        
+        return dummy->next;
     }
 };

@@ -1,16 +1,21 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        // pre
-        sort(nums.begin(), nums.end());
-        
         // var
-        int count = 1;
+        map<int, int> m;
+        int max_count = 1;
+        int max_index = 0;
+        
+        // init
+        m[nums[0]]++;
+        
         for (int i = 1; i < nums.size(); i++) {
-            count = nums[i - 1] == nums[i] ? count + 1 : 1;
-            if (count > nums.size() / 2)
-                return nums[i];
+            m[nums[i]]++;
+            if (m[nums[i]] > max_count) {
+                max_count = m[nums[i]];
+                max_index = i;
+            }
         }
-        return nums[0];
+        return nums[max_index];
     }
 };
