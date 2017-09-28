@@ -2,19 +2,27 @@ class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         // var
-        set<vector<int>> s;
-        vector<vector<int>> v;
+        map<vector<int>, bool> m;
+        vector<vector<int>> result;
         
-        // init
-        sort(nums.begin(), nums.end());
+        helper(0, nums, m, result);
         
-        v.push_back(nums);
-        while (next_permutation(nums.begin(), nums.end())) {
-            if (s.find(nums) == s.end()) {
-                s.insert(nums);
-                v.push_back(nums);
+        return result;
+    }
+    
+    void helper(int begin, vector<int>& nums, map<vector<int>, bool>& m, vector<vector<int>>& r) {
+        if (begin >= nums.size()) {
+            if (!m[nums]) {
+                m[nums] = true;
+                r.push_back(nums);
             }
+            return;
         }
-        return v;
+        
+        for (int i = begin; i < nums.size(); i++) {
+            swap(nums[begin], nums[i]);
+            helper(begin + 1, nums, m, r);
+            swap(nums[begin], nums[i]);
+        }
     }
 };
