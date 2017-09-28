@@ -10,29 +10,23 @@ class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
         // var
-        ListNode* new_head = new ListNode(0);
-        ListNode* it = new_head;
-        ListNode* prev = new_head;
+        ListNode* dummy = new ListNode(0);
+        ListNode* faster = dummy;
+        ListNode* slower = dummy;
         
         // init
-        it->next = head;
+        dummy->next = head;
+        for (int i = 0; i <= n; i++)
+            faster = faster->next;
         
-        while (it) {
-            if (find_nth(it, n)) {
-                prev->next = it->next;
-                return new_head->next;;
-            }
-            else {
-                prev = it;
-                it = it->next;
-            }
+        while (faster) {
+            faster = faster->next;
+            slower = slower->next;
         }
-        return new_head->next;
-    }
-    
-    bool find_nth(ListNode* head, int n) {
-        for (int i = 0; i < n; i++)
-            head = head->next;
-        return head == NULL;
+        
+        // remove nth node
+        slower->next = slower->next ? slower->next->next : NULL;
+        
+        return dummy->next;
     }
 };
