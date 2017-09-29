@@ -10,19 +10,20 @@
 class Solution {
 public:
     int kthSmallest(TreeNode* root, int k) {
-        traversal(root);
-        return result[k - 1];
+        // var
+        vector<int> res;
+        
+        helper(root, res, k);
+        
+        return res[k - 1];
     }
     
-    void traversal(TreeNode* root) {
-        if (!root)
+    void helper(TreeNode* root, vector<int>& res, int k) {
+        if (!root || res.size() >= k)
             return;
         
-        traversal(root->left);
-        result.push_back(root->val);
-        traversal(root->right);
+        helper(root->left, res, k);
+        res.push_back(root->val);
+        helper(root->right, res, k);
     }
-    
-    // var
-    vector<int> result;
 };
