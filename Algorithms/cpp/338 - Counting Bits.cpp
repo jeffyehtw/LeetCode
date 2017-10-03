@@ -1,20 +1,14 @@
 class Solution {
 public:
-    vector<int> countBits(int num) {
+    vector<int> countBits(int num) {            
         // var
-        vector<int> result;
+        vector<int> result({ 0, 1, 1 });
         
-        for (int i = 0; i <= num; i++) {
-            // var
-            int temp = i;
-            int count = 0;
-            
-            while (temp) {
-                count += temp & 1;
-                temp >>= 1;
-            }
-            result.push_back(count);
-        }
+        if (num < 3)
+            return vector<int>(result.begin(), result.begin() + num + 1);
+        
+        for (int i = 3; i <= num; i++)
+            result.push_back(result[i >> 1] + (i & 1));
         
         return result;
     }
