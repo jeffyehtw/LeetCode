@@ -1,20 +1,19 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        // remove illegal
-        for (int i = 0; i < s.length(); ) {
-            if (!isalpha(s[i]) && !isdigit(s[i]))
-                s.erase(s.begin() + i);
-            else {
-                s[i] = isalpha(s[i]) ? tolower(s[i]) : s[i];
-                i++;
-            }
+        // var
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            for (; left < right && !isalnum(s[left]); left++);
+            for (; left < right && !isalnum(s[right]); right--);
+            
+            if (tolower(s[left]) != tolower(s[right]))
+                return false;
+
+            left++, right--;
         }
-        
-        // check
-        for (int i = 0; i < s.length() / 2; i++)
-        if (s[i] != s[s.length() - 1 - i])
-            return false;
         return true;
     }
 };
