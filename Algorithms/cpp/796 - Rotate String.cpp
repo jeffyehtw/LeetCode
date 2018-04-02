@@ -15,7 +15,7 @@ public:
             return false;
         
         while (1) {
-            if (A == B.substr(idx) + B.substr(0, idx);
+            if (A == B.substr(idx) + B.substr(0, idx))
                 return true;
             
             idx++;
