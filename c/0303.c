@@ -3,7 +3,6 @@ typedef struct {
     int size;
 } NumArray;
 
-
 NumArray* numArrayCreate(int* nums, int numsSize) {
     NumArray* ret = malloc(sizeof(NumArray));
     
