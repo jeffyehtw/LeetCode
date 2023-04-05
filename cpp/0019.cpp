@@ -3,30 +3,33 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        // var
-        ListNode* dummy = new ListNode(0);
-        ListNode* faster = dummy;
-        ListNode* slower = dummy;
-        
-        // init
-        dummy->next = head;
-        for (int i = 0; i <= n; i++)
-            faster = faster->next;
-        
-        while (faster) {
-            faster = faster->next;
-            slower = slower->next;
+        ListNode fake;
+        ListNode* slow = &fake;
+        ListNode* fast = &fake;
+        ListNode* prev = &fake;
+
+        fake.next = head;        
+
+        for (int i = 0; i < n; i++) {
+            fast = fast->next;
         }
-        
-        // remove nth node
-        slower->next = slower->next ? slower->next->next : NULL;
-        
-        return dummy->next;
+
+        while (fast) {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        prev->next = slow->next;
+
+        return fake.next;
     }
 };
