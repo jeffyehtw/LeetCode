@@ -4,33 +4,36 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
+private:
+    vector<string> ret;
+    void traversal(TreeNode* root, string s) {
+        if (root == NULL) {
+            return;
+        }
+
+        if (s == "") {
+            s += to_string(root->val);
+        } else {
+            s += "->" + to_string(root->val);
+        }
+        
+        if ((root->left == NULL) && (root->right == NULL)) {
+            ret.push_back(s);
+            return;
+        }
+
+        traversal(root->left, s);
+        traversal(root->right, s);
+    }
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
-        // var
-        vector<string> result;
-        
-        if (!root)
-            return vector<string>();
-        if (!root->left && !root->right)
-            return vector<string>({ to_string(root->val) });
-        if (root->left)
-            helper(root->left, to_string(root->val), result);
-        if (root->right)
-            helper(root->right, to_string(root->val), result);
-        
-        return result;        
-    }
-    
-    void helper(TreeNode* root, string tmp, vector<string>& r) {
-        if (!root->left && !root->right)
-            r.push_back(tmp + "->" + to_string(root->val));
-        if (root->left)
-            helper(root->left, tmp + "->" + to_string(root->val), r);
-        if (root->right)
-            helper(root->right, tmp + "->" + to_string(root->val), r);
+        traversal(root, "");
+        return ret;
     }
 };

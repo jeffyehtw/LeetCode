@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int minimumSum(int num) {
+        int sum = 0;
+        vector<int> digits;
+
+        while (num > 0) {
+            digits.push_back(num % 10);
+            num /= 10;
+        }
+        sort(digits.begin(), digits.end());
+        
+        sum += digits[0] + digits[1];
+        sum *= 10;
+        sum += digits[2] + digits[3];
+
+        return sum;
+    }
+};

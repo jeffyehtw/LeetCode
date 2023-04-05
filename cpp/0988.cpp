@@ -11,23 +11,27 @@
  */
 class Solution {
 private:
-    int ret = 0;
-    void traversal(TreeNode* root, int acc) {
+    string ret;
+    void traversal(TreeNode* root, string s) {
         if (root == NULL) {
             return;
         }
 
-        acc = (acc * 10) + root->val;
+        s = string(1, ('a' + root->val)) + s;
         if ((root->left == NULL) && (root->right == NULL)) {
-            ret += acc;
+            if (ret == "") {
+                ret = s;
+            } else {
+                ret = (ret < s) ? ret : s;
+            }
+        } else {
+            traversal(root->left, s);
+            traversal(root->right, s);
         }
-
-        traversal(root->left, acc);
-        traversal(root->right, acc);
     }
 public:
-    int sumNumbers(TreeNode* root) {
-        traversal(root, 0);
+    string smallestFromLeaf(TreeNode* root) {
+        traversal(root, "");
         return ret;
     }
 };

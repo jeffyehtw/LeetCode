@@ -1,15 +1,15 @@
 class Solution {
 public:
     int addDigits(int num) {
-        if (num >= 10) {
-            // var
-            int temp = num % 9;
-            
-            if (temp == 0)
-                return 9;
-            return temp;
+        while (num > 9) {
+            int sum = 0;
+
+            while (num > 0) {
+                sum += num % 10;
+                num /= 10;
+            }
+            num = sum;
         }
-        else
-            return num;
+        return num;
     }
 };

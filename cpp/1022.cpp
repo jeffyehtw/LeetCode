@@ -12,12 +12,12 @@
 class Solution {
 private:
     int ret = 0;
-    void traversal(TreeNode* root, int acc) {
+    void traversal(TreeNode* root, unsigned int acc) {
         if (root == NULL) {
             return;
         }
 
-        acc = (acc * 10) + root->val;
+        acc = (acc << 1) + root->val;
         if ((root->left == NULL) && (root->right == NULL)) {
             ret += acc;
         }
@@ -26,7 +26,7 @@ private:
         traversal(root->right, acc);
     }
 public:
-    int sumNumbers(TreeNode* root) {
+    int sumRootToLeaf(TreeNode* root) {
         traversal(root, 0);
         return ret;
     }
