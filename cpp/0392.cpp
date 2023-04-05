@@ -1,18 +1,24 @@
 class Solution {
 public:
     bool isSubsequence(string s, string t) {
-        // var
-        int index = 0;
-        
-        for (int i = 0; i < s.length(); i++) {
-            // var
-            size_t next = t.find(s[i], index);
-            
-            if (next == string::npos)
-                return false;
-            
-            index = next + 1;
+        int i = 0;
+        int j = 0;
+
+        if (s.length() > t.length()) {
+            return false;
+        } else if (s.length() == t.length()) {
+            return s == t;
         }
-        return true;
+
+        while (i < s.length() && j < t.length()) {
+            if (s[i] == t[j]) {
+                i++;
+                j++;
+            } else {
+                j++;
+            }
+        }
+        
+        return (i == s.length());
     }
 };
