@@ -3,32 +3,29 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
-        // var
-        ListNode* dummy = new ListNode(0);
-        ListNode* index = dummy;
+        ListNode fake;
+        ListNode* index;
 
-        // init
-        dummy->next = head;
-        
+        fake.next = head;
+        index = &fake;
+
         while (index->next && index->next->next) {
-            // var
-            ListNode* front = index->next;
-            ListNode* back = index->next->next;
-            ListNode* tmp = back->next;
-            
-            index->next = back;
-            back->next = front;
-            front->next = tmp;
-            
+            ListNode* tmp = index->next;
+            index->next = index->next->next;
+            tmp->next = index->next->next;
+            index->next->next = tmp;
+
             index = index->next->next;
         }
-        
-        return dummy->next;
+
+        return fake.next;
     }
 };

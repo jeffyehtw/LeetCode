@@ -1,24 +1,33 @@
 class Solution {
-public:
-    vector<string> letterCasePermutation(string S) {
-        help(S, 0);
-        return result;
-    }
-    
-    void help(string s, int idx) {
-        if (idx == s.length()) {
-            result.push_back(s);
+private:
+    vector<string> ret;
+    void _letterCasePermutation(string s, int index) {
+        if (index == s.length()) {
+            ret.push_back(s);
+            return;
+        } else if (index > s.length() - 1) {
             return;
         }
-        
-        if (isdigit(s[idx]))
-            help(s, idx + 1);
-        else {
-            help(s, idx + 1);
-            s[idx] = islower(s[idx]) ? s[idx] - 'a' + 'A' : s[idx] - 'A' + 'a';
-            help(s, idx + 1);
+
+        if (isalpha(s[index])) {
+            _letterCasePermutation(s, index + 1);
+            if (s[index] >= 'a' && s[index] <= 'z') {
+                s[index] = toupper(s[index]);
+                _letterCasePermutation(s, index + 1);
+            } else {
+                s[index] = tolower(s[index]);
+                _letterCasePermutation(s, index + 1);
+            }            
+        } else {
+            _letterCasePermutation(s, index + 1);
         }
     }
-private:
-    vector<string> result;
+public:
+    vector<string> letterCasePermutation(string s) {
+        if (s.length() == 1) {
+            
+        }
+        _letterCasePermutation(s, 0);
+        return ret;
+    }
 };

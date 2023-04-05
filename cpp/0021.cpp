@@ -3,29 +3,39 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        // var
-        ListNode* result = new ListNode(0);
-        ListNode* it = result;
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode fake;
+        ListNode* index = &fake;
         
-        while (l1 && l2) {
-            // var
-            bool less_than = l1->val < l2->val;
-            
-            it->next = new ListNode(less_than ? l1->val : l2->val);
-            it = it->next;
-            
-            if (less_than)
-                l1 = l1->next;
-            else
-                l2 = l2->next;
+        while (list1 != NULL && list2 != NULL) {
+            if (list1->val > list2->val) {
+                index->next = new ListNode(list2->val);
+                index = index->next;
+                list2 = list2->next;
+            } else {
+                index->next = new ListNode(list1->val);
+                index = index->next;
+                list1 = list1->next;
+            }
         }
-        it->next = l1 ? l1 : l2;
-        return result->next;
+        while(list1 != NULL) {
+            index->next = new ListNode(list1->val);
+            index = index->next;
+            list1 = list1->next;
+        }
+        while(list2 != NULL) {
+            index->next = new ListNode(list2->val);
+            index = index->next;
+            list2 = list2->next;
+        }
+
+        return fake.next;
     }
 };

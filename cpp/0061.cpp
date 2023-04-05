@@ -3,65 +3,59 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
+private:
+    int length(ListNode* head) {
+        int ret = 0;
+        while (head) {
+            ret++;
+            head = head->next;
+        }
+        return ret;
+    }
+    ListNode* shiftOne(ListNode* head) {
+        ListNode fake;
+        ListNode* index = head;
+
+        if (head == NULL) {
+            return NULL;
+        } else if (head && head->next == NULL) {
+            return head;
+        }
+
+        fake.next = head;
+        
+        /* make loop */
+        while (index && index->next) {
+            index = index->next;
+        }
+        index->next = fake.next;
+        fake.next = index;
+
+        index = head;
+        while (index && index->next != fake.next) {
+            index = index->next;
+        }
+        index->next = NULL;
+
+        return fake.next;
+    }
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        if (!head)
-            return head;
-        
-        // var
-        int n = len(head);
-        ListNode* new_head = new ListNode(0);
-        new_head->next = head;
-        
-        // init
-        k %= n;
-        ListNode* prev = new_head;
-        ListNode* it = new_head->next;
-        
-        while (it) {
-            if (is_kth(it, k)) {
-                // no need to change
-                if (it == head)
-                    break;
+        int len = length(head);
 
-                // change head
-                new_head->next = it;
-                
-                // link to old head
-                while (it->next)
-                    it = it->next;
-                it->next = head;
-                
-                // split old end link
-                prev->next = NULL;
+        if (len == 0) {
+            return NULL;
+        }
 
-                break;
-            }
-            else {
-                prev = it;
-                it = it->next;
-            }
+        for (int i = 0; i < k % len; i++) {
+            head = shiftOne(head);
         }
-        return new_head->next;
-    }
-    
-    bool is_kth(ListNode* head, int k) {
-        for (int i = 0; i < k && head; i++)
-            head = head->next;
-        return head == NULL;
-    }
-    
-    int len(ListNode* head) {
-        // var
-        int count = 0;
-        while (head) {
-            count++;
-            head = head->next;
-        }
-        return count;
+        return head;
     }
 };

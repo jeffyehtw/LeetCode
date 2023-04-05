@@ -1,22 +1,21 @@
 class Solution {
 public:
     bool isPerfectSquare(int num) {
-        // var
-        int left = 1;
-        int right = num / 2;
-        
-        while (left <= right) {
-            // var
-            long middle = (right - left) / 2 + left;
-            long tmp = middle * middle;
-            
-            if (tmp == num)
+        unsigned long left = 1;
+        unsigned long right = num / 2 + 1;
+
+        while (left < right) {
+            unsigned long middle = (left + right) / 2;
+
+            if (num == middle * middle) {
                 return true;
-            else if (tmp > num)
-                right = middle - 1;
-            else
+            } else if (num > middle * middle) {
                 left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
         }
-        return false;
+
+        return (num == left * left);
     }
 };

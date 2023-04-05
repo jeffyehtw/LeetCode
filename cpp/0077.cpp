@@ -1,29 +1,21 @@
 class Solution {
+    vector<vector<int>> ret;
+    void _combine(vector<int> nums, int idx, int n, int k) {
+        if (k == 0) {
+            ret.push_back(nums);
+            return;
+        } else if (idx > n || n - idx + 1 < k) {
+            return;
+        }
+        
+        _combine(nums, idx + 1, n, k);
+        nums.push_back(idx);
+        _combine(nums, idx + 1, n, k - 1);
+    }
 public:
     vector<vector<int>> combine(int n, int k) {
-        if (n <= 0)
-            return result;
-            
-        DFS(vector<int>(), n, k, 1);
-        
-        return result;
+        vector<int> tmp;
+        _combine(tmp, 1, n, k);
+        return ret;
     }
-    
-    void DFS(vector<int> path, int n, int k, int start) {
-        if (path.size() == k) {
-            result.push_back(path);
-            return;
-        }
-        else if (path.size() > k)
-            return;
-            
-        for (int i = start; i <= n; i++) {
-            path.push_back(i);
-            DFS(path, n, k, i + 1);
-            path.pop_back();
-        }
-    }
-    
-    // var
-    vector<vector<int>> result;
 };

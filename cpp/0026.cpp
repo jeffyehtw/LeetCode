@@ -1,14 +1,23 @@
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
-        // var
-        for (int i = 0; i < nums.size(); ) {
-            if (nums[i] == nums[i + 1] && i < nums.size() - 1) {
-                nums.erase(nums.begin() + i);
+        int cur = 0;
+        int k = 1;
+        
+        sort(nums.begin(), nums.end());
+
+        cur = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            if (cur != nums[i]) {
+                k++;
+                cur = nums[i];
+            } else {
+                nums[i] = INT_MAX;
             }
-            else
-                i++;
         }
-        return nums.size();
+        sort(nums.begin(), nums.end());
+
+
+        return k;
     }
 };

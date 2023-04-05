@@ -1,32 +1,23 @@
 class Solution {
 public:
     vector<int> majorityElement(vector<int>& nums) {
-        // var
-        int count = 1;
-        vector<int> result;
-        
-        // pre
-        sort(nums.begin(), nums.end());
-        
-        if (nums.size() == 0)
-            return vector<int>();
-        else if (nums.size() == 1)
-            return nums;
-        else if (nums.size() == 2)
-            result.push_back(nums[0]);
-        
-        // run
-        for (int i = 1; i < nums.size(); i++) {
-            count = nums[i - 1] == nums[i] ? count + 1 : 1;
-            
-            if (count > nums.size() / 3) {
-                if (result.size() && result.back() == nums[i])
-                    continue;
-                else
-                    result.push_back(nums[i]);
+        vector<int> ret;
+        int n = nums.size() / 3;
+        unordered_map<int, int> umap;
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (umap.find(nums[i]) == umap.end()) {
+                umap[nums[i]] = 0;
+            } 
+            umap[nums[i]]++;
+
+            // cout << nums[i] << " " << umap[nums[i]] << endl;
+            if (umap[nums[i]] > n) {
+                ret.push_back(nums[i]);
+                umap[nums[i]] = INT_MIN;
             }
         }
-            
-        return result;
+
+        return ret;
     }
 };

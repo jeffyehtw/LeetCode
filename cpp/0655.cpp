@@ -4,46 +4,54 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
+private:
+    vector<vector<string>> ret;
+    int height(TreeNode* root) {
+        if (root == NULL) {
+            return 0;
+        }
+        return 1 + max(height(root->left), height(root->right));
+    }
+    void travel(TreeNode* root, int level, int* index, int height) {
+        if (root == NULL || level > height) {
+            return;
+        }
+
+        if (root->left) {
+            travel(root->left, level + 1, index, height);       
+        } else if (level < height) {
+            *index = *index + (1 << (height - level)) - 1;
+        }
+        ret[level - 1][*index] = to_string(root->val);
+        *index = *index + 1;
+        if (root->right) {
+            travel(root->right, level + 1, index, height);       
+        } else if (level < height) {
+            *index = *index + (1 << (height - level)) - 1;
+        }
+    }
+
 public:
     vector<vector<string>> printTree(TreeNode* root) {
-        if (!root)
-            return vector<vector<string>>();
-        
-        // var
-        int depth = calc_depth(root);
-        int width = pow(2, depth) - 1;
-        vector<vector<string>> result;
-        
-        // init
-        result = vector<vector<string>>(depth, vector<string>(width, ""));
+        int h = 0;
+        int w = 0;
+        int index = 0;
 
-        helper(0, 0, width, root, result);
-        
-        return result;
-    }
-    
-    void helper(int level, int left, int right, TreeNode* root, vector<vector<string>>& r) {
-        if (!root)
-            return;
-        
-        r[level][(left + right) / 2] = to_string(root->val);
-        
-        helper(level + 1, left, (left + right) / 2, root->left, r);
-        helper(level + 1, (left + right) / 2, right, root->right, r);
-        
-    }
-    
-    int calc_depth(TreeNode* root) {
-        if (!root)
-            return 0;
-        
-        int left = calc_depth(root->left);
-        int right = calc_depth(root->right);
-        
-        return max(left, right) + 1;     
+        if (root == NULL) {
+            return ret;
+        }
+
+        h = height(root);
+        w = (1 << h) - 1;
+        ret = vector<vector<string>>(h, vector<string>(w, ""));
+        travel(root, 1, &index, h);
+
+        return ret;
     }
 };

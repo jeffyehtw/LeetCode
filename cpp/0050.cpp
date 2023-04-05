@@ -1,20 +1,20 @@
 class Solution {
 public:
     double myPow(double x, int n) {
-        // var
-        double result = 1;
-        unsigned long long p;
-        
-        p = n < 0 ? -n : n; 
-        x = n < 0 ? 1 / x : x;
-        
-        while (p) {
-            if (p & 1) {
-                result *= x;
+        double ret = 1;
+        int m = abs(n);
+
+        if (m == 0) {
+            return 1;
+        } else if (m == 1) {
+            return n > 0 ? x : 1 / x;
+        } else {
+            double m12 = myPow(x, m / 2);
+            ret = m12 * m12;
+            if (m % 2 == 1) {
+                ret *= x;
             }
-            x *= x;
-            p >>= 1;
+            return n > 0 ? ret : 1 / ret;
         }
-        return result;
     }
 };

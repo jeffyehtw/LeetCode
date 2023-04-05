@@ -1,19 +1,22 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        // var
-        int left = 0;
-        int right = s.length() - 1;
+        vector<char> v;
 
-        while (left < right) {
-            for (; left < right && !isalnum(s[left]); left++);
-            for (; left < right && !isalnum(s[right]); right--);
-            
-            if (tolower(s[left]) != tolower(s[right]))
-                return false;
-
-            left++, right--;
+        for (int i = 0; i < s.length(); i++) {
+            if (isalpha(s[i])) {
+                v.push_back(tolower(s[i]));
+            } else if (s[i] >= '0' && s[i] <= '9') {
+                v.push_back(s[i]);
+            }
         }
+
+        for (int i = 0; i < v.size() >> 1; i++) {
+            if (v[i] != v[v.size() - 1 - i]) {
+                return false;
+            }
+        }
+        
         return true;
     }
 };

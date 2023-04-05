@@ -1,28 +1,23 @@
 class Solution {
 public:
     bool isHappy(int n) {
-        // var
-        map<int, bool> m;
-        
-        while (1) {
-            // var
+        vector<bool> seen(1000, false);
+
+        while (n != 1) {
             int sum = 0;
-            
-            while (n) {
-                // var
-                int digit = n % 10;
-                sum += digit * digit;
+        
+            while (n > 0) {
+                sum += (n % 10) * (n % 10);
                 n /= 10;
             }
-            
             n = sum;
-            
-            if (m.find(n) == m.end())
-                m[sum] = true;
-            else if (n == 1)
-                return true;
-            else
+            if (seen[n]) {
                 return false;
+            }
+            seen[n] = true;
+            
         }
+
+        return true;
     }
 };

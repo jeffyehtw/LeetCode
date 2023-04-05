@@ -20,7 +20,7 @@ public:
         if (!isdigit(s[index])) {
             return 0;
         }
-
+        
         for (; index < s.length(); index++) {
             if (isdigit(s[index])) {
                 ret *= 10;

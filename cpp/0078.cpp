@@ -2,21 +2,20 @@ class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         vector<vector<int>> ret;
+        unsigned int n = 1 << nums.size();
 
-        for (int i = 0; i < (1 << nums.size()); i++) {
-            int n = i;
-            int index = 0;
-            vector<int> subset;
+        for (int i = 0; i < n; i++) {
+            int k = i;
+            vector<int> set;
 
-            while (n > 0) {
-                if (n & 1) {
-                    subset.push_back(nums[index]);
+            for (int j = 0; j < nums.size(); j++) {
+                if (k & 1) {
+                    set.push_back(nums[j]);
                 }
-                index++;
-                n >>= 1;
+                k >>= 1;
             }
 
-            ret.push_back(subset);
+            ret.push_back(set);
         }
 
         return ret;

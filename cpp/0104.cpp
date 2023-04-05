@@ -4,19 +4,28 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        if (!root)
+        int left = 0;
+        int right = 0;
+
+        if (root == NULL) {
             return 0;
-        
-        // var
-        int left = maxDepth(root->left);
-        int right = maxDepth(root->right);
-        
-        return max(left, right) + 1;
+        }
+
+        if (root->left) {
+            left = maxDepth(root->left);
+        }
+        if (root->right) {
+            right = maxDepth(root->right);
+        }
+
+        return 1 + max(left, right);
     }
 };

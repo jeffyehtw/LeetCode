@@ -1,19 +1,23 @@
 class Solution {
+private:
+    bool isCapital(char c) {
+        return (c >= 'A') && (c <= 'Z');
+    }
 public:
     bool detectCapitalUse(string word) {
-        // var
-        int count = 0;
-        int index = -1;
-        
+        int cnt = 0;
+        bool first = isCapital(word[0]);
+
         for (int i = 0; i < word.length(); i++) {
-            if (word[i] >= 'A' && word[i] <= 'Z') {
-                index = i;
-                count++;
+            if (isCapital(word[i])) {
+                cnt++;
             }
         }
-        
-        if (count == word.length() || count == 0 || count == 1 && index == 0)
-            return true;
-        return false;
+
+        if (first) {
+            return (cnt == word.length() || cnt == 1);
+        } else {
+            return cnt == 0;
+        }
     }
 };

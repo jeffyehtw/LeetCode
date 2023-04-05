@@ -1,27 +1,32 @@
 class Solution {
 public:
     string addBinary(string a, string b) {
-        // var
-        string result;
-        int len = max(a.length(), b.length()) + 1;
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        int carry = 0;
+        string ret = "";
         
-        for (int i = 0; i < len; i++) {
-            if (a.length() < len)
-                a.insert(0, "0");
-            if (b.length() < len)
-                b.insert(0, "0");
-            result.append("0");
+        while (i > -1 || j > -1) {
+            int sum = 0;
+            if (i > -1) {
+                sum += a[i] - '0';
+            }
+            if (j > -1) {
+                sum += b[j] - '0';
+            }
+            sum += carry;
+            carry = sum / 2;
+            sum %= 2;
+            
+            i--;
+            j--;
+
+            ret = ((sum == 0) ? "0" : "1") + ret;
         }
-         
-        int carry = 0;  
-        for (int i = 0; i < len; i++) {
-            int temp = a[len - 1 - i] + b[len - 1 - i] + carry - '0' * 2;
-            carry = temp / 2;
-            result[len - 1 - i] = '0' + (temp % 2); 
+        if (carry > 0) {
+            ret = "1" + ret;
         }
-        
-        if (result[0] == '0')
-            result.erase(0, 1);
-        return result;
+
+        return ret;
     }
 };

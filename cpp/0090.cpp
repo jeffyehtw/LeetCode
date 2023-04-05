@@ -1,34 +1,22 @@
 class Solution {
 public:
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        // var
-        set<vector<int>> s;
-        vector<vector<int>> result(1, vector<int>());
-        
-        // init
-        for (int i = 0; i < nums.size(); i++) {
-            int n = result.size();
-            
-            for (int j = 0; j < n; j++) {
-                // fix order
-                sort(result[j].begin(), result[j].end());
-                
-                // add
-                result.push_back(result[j]);
-                result.back().push_back(nums[i]);
+        set<vector<int>> sv;
+        unsigned int n = 1 << nums.size();
+
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < n; i++) {
+            int j = i;
+            vector<int> subset;
+            for (int k = 0; k < nums.size() && j > 0; k++, j >>= 1) {
+                if (j & 1) {
+                    subset.push_back(nums[k]);
+                }
             }
-            
-            // fix duplicate
-            sort(result.begin(), result.end());
-            
-            // remove duplicate
-            for (int j = 1; j < result.size(); ) {
-                if (result[j - 1] == result[j])
-                    result.erase(result.begin() + j);
-                else
-                    j++;
-            }
+            sv.insert(subset);
         }
-        return result;
+
+        return vector<vector<int>>(sv.begin(), sv.end());
     }
 };

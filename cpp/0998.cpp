@@ -11,7 +11,7 @@
  */
 class Solution {
 private:
-    TreeNode* _constructMaximumBinaryTree(vector<int>& nums, int left, int right) {
+    TreeNode* _construct(vector<int>& nums, int left, int right) {
         int max = -1;
         int idx = -1;
         TreeNode* ret = NULL;
@@ -29,13 +29,29 @@ private:
 
         ret = new TreeNode(max);
 
-        ret->left = _constructMaximumBinaryTree(nums, left, idx - 1);
-        ret->right = _constructMaximumBinaryTree(nums, idx + 1, right);
+        ret->left = _construct(nums, left, idx - 1);
+        ret->right = _construct(nums, idx + 1, right);
 
         return ret;
     }
+    void _destruct(TreeNode* root, vector<int>& nums) {
+        if (root == NULL) {
+            return;
+        }
+        _destruct(root->left, nums);
+        nums.push_back(root->val);
+        _destruct(root->right, nums);
+    }
 public:
-    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
-        return _constructMaximumBinaryTree(nums, 0, nums.size() - 1);
+    TreeNode* insertIntoMaxTree(TreeNode* root, int val) {
+        vector<int> arr;
+
+        if (root == NULL) {
+            return NULL;
+        }
+
+        _destruct(root, arr);
+        arr.push_back(val);
+        return _construct(arr, 0, arr.size() - 1);
     }
 };

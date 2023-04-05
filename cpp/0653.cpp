@@ -10,26 +10,30 @@
  * };
  */
 class Solution {
+private:
+    unordered_map<int, bool> umap;
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> ret;
-        vector<int> tmp;
+    bool findTarget(TreeNode* root, int k) {
+        bool left;
+        bool right;
 
         if (root == NULL) {
-            return ret;
+            return false;
+        }
+
+        if (umap.find(k - root->val) == umap.end()) {
+            umap[root->val] = true;
+        } else {
+            return true;
         }
 
         if (root->left) {
-            tmp = inorderTraversal(root->left);
-            ret.insert(ret.end(), tmp.begin(), tmp.end());
+            left = findTarget(root->left, k);
         }
-        ret.push_back(root->val);
         if (root->right) {
-            tmp.clear();
-            tmp = inorderTraversal(root->right);
-            ret.insert(ret.end(), tmp.begin(), tmp.end());
+            right = findTarget(root->right, k);
         }
-
-        return ret;        
+        
+        return left || right;
     }
 };
