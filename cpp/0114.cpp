@@ -4,41 +4,36 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
+private:
+    vector<TreeNode*> v;
+    void traversal(TreeNode* root) {
+        if (root == NULL) {
+            return;
+        }
+        v.push_back(root);
+        traversal(root->left);
+        traversal(root->right);
+    }
 public:
     void flatten(TreeNode* root) {
-        if (!root)
+        TreeNode* index = root;
+
+        if (root == NULL) {
             return;
-        
-        if (root->right)
-            flatten(root->right);
-        
-        if (root->left) {
-            if (is_leaf(root->left)) {
-                root->left->right = root->right;
-                root->right = root->left;
-                root->left = NULL;
-                return;
-            }
-            
-            flatten(root->left);
-                
-            // var
-            TreeNode* it = root->left;
-            
-            while (it->right)
-                it = it->right;
-            
-            it->right = root->right;
-            root->right = root->left;
-            root->left = NULL;
         }
-    }
-    
-    bool is_leaf(TreeNode* root) {
-        return !root->left && !root->right;
+
+        traversal(root);
+        for (int i = 0 ; i < v.size(); i++) {
+            index->val = v[i]->val;
+            index->left = NULL;
+            index->right = (i < v.size() - 1) ? v[i + 1] : NULL;
+            index = index->right;
+        }
     }
 };

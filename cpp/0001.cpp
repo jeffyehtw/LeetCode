@@ -1,7 +1,7 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        map<int, int> known;
+        unordered_map<int, int> known;
         vector<int> ret;
 
         for (int i = 0; i < nums.size(); i++) {

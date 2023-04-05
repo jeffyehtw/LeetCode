@@ -4,32 +4,36 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    int pathSum(TreeNode* root, int sum) {
-        if (!root)
-            return 0;
-        
-        // var
-        int left = pathSum(root->left, sum);
-        int right = pathSum(root->right, sum);
-        
-        return helper(root, 0, sum) + left + right;
+    int ret = 0;
+    void traversal(TreeNode* root, long long targetSum) {
+        if (root == NULL) {
+            return;
+        }
+
+        targetSum -= root->val;
+        if (targetSum == 0) {
+            ret++;
+        }
+
+        traversal(root->left, targetSum);
+        traversal(root->right, targetSum);
     }
-    
-    int helper(TreeNode* root, int sum, int target) {
-        if (!root)
+public:
+    int pathSum(TreeNode* root, int targetSum) {
+        if (root == NULL) {
             return 0;
-            
-        sum += root->val;
-        
-        // var
-        int left = helper(root->left, sum, target);
-        int right = helper(root->right, sum, target);
-        
-        return (sum == target) + left + right;
+        }
+
+        traversal(root, targetSum);
+        pathSum(root->left, targetSum);
+        pathSum(root->right, targetSum);
+
+        return ret;
     }
 };
