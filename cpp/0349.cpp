@@ -1,29 +1,19 @@
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        // init
-        sort(nums1.begin(), nums1.end());
-        sort(nums2.begin(), nums2.end());
-        
-        remove_duplicate(nums1);
-        remove_duplicate(nums2);
-        
-        // var
-        vector<int> result(nums1.size() + nums2.size());
-        vector<int>::iterator it;
-        
-        it = set_intersection(nums1.begin(), nums1.end(), nums2.begin(), nums2.end(), result.begin());
-        result.resize(it - result.begin());
+        vector<int> map(1001, false);
+        vector<int> ret;
 
-        return result;
-    }
-    
-    void remove_duplicate(vector<int>& nums) {
-        for (int i = 1; i < nums.size(); ) {
-            if (nums[i - 1] == nums[i])
-                nums.erase(nums.begin() + i);
-            else
-                i++;
+        for (int i = 0; i < nums1.size(); i++) {
+            map[nums1[i]] = true;
         }
+        for (int i = 0; i < nums2.size(); i++) {
+            if (map[nums2[i]]) {
+                ret.push_back(nums2[i]);
+                map[nums2[i]] = false;
+            }
+        }
+
+        return ret;
     }
 };

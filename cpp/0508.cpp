@@ -4,48 +4,51 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    vector<int> findFrequentTreeSum(TreeNode* root) {
-        if (!root)
-            return vector<int>();
-        
-        // var
-        vector<int> result;
-        
-        traversal(root);
-        
-        for (map<int, int>::iterator it = m.begin(); it != m.end(); it++) {
-            if (it->second == MAX)
-                result.push_back(it->first);
-        }
-        
-        return result;
-    }
-    
+private:
+    int max = 0;
+    unordered_map<int, int> umap;
     int traversal(TreeNode* root) {
-        if (!root)
+        int sum = 0;
+
+        if (root == NULL) {
             return 0;
-            
-        // var
-        int left = traversal(root->left);
-        int right = traversal(root->right);
-        int sum = left + right + root->val;
-        
-        if (m.find(sum) == m.end())
-            m[sum] = 1;
-        else {
-            m[sum]++;
-            MAX = max(MAX, m[sum]);
         }
-        
+
+        sum = root->val;
+        if (root->left) {
+            sum += traversal(root->left);
+        }
+        if (root->right) {
+            sum += traversal(root->right);
+        }
+        if (umap.find(sum) == umap.end()) {
+            umap[sum] = 1;
+        } else {
+            umap[sum]++;
+        }
+        if (umap[sum] > max) {
+            max = umap[sum];
+        }
+
         return sum;
     }
-    
-    // var
-    map<int, int> m;
-    int MAX = 1;
+public:
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        vector<int> ret;
+        
+        traversal(root);
+        for (auto it = umap.begin(); it != umap.end(); it++) {
+            if (it->second == max) {
+                ret.push_back(it->first);
+            }
+        }
+
+        return ret;
+    }
 };

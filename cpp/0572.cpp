@@ -4,30 +4,33 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    bool isSubtree(TreeNode* s, TreeNode* t) {
-        if (bool(s) != bool(t))
-            return false;
-        
-        return same(s, t) || isSubtree(s->left, t) || isSubtree(s->right, t);
-    }
 private:
-    bool same(TreeNode* s, TreeNode* t) {
-        if (bool(s) != bool(t))
-            return false;
-        else if (!s && !t)
+    bool isSameTree(TreeNode* a, TreeNode* b) {
+        if ((a == NULL) && (b == NULL)) {
             return true;
-        else if (s->val != t->val)
+        } else if ((a == NULL) && (b != NULL)
+            || (a != NULL) && (b == NULL)) {
             return false;
-        
-        // var
-        bool left = same(s->left, t->left);
-        bool right = same(s->right, t->right);
-        
-        return left && right;
+        }
+
+        return ((a->val == b->val)
+            && isSameTree(a->left, b->left)
+            && isSameTree(a->right, b->right));
+    }
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if (root == NULL) {
+            return false;
+        }
+
+        return (isSameTree(root, subRoot)
+            || isSubtree((root) ? root->left : NULL, subRoot)
+            || isSubtree((root) ? root->right : NULL, subRoot));
     }
 };
