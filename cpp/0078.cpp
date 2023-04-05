@@ -1,23 +1,24 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        // var
-        vector<vector<int>> result;
-        int len = pow(2, nums.size());
-                      
-        for (int i = 0; i < len; i++) {
-            // var
-            int tmp = i;
-            vector<int> v;
-            
-            for (int j = 0; j < nums.size(); j++) {
-                if (tmp & 1)
-                    v.push_back(nums[j]);
-                tmp >>= 1;
+        vector<vector<int>> ret;
+
+        for (int i = 0; i < (1 << nums.size()); i++) {
+            int n = i;
+            int index = 0;
+            vector<int> subset;
+
+            while (n > 0) {
+                if (n & 1) {
+                    subset.push_back(nums[index]);
+                }
+                index++;
+                n >>= 1;
             }
-            
-            result.push_back(v);
+
+            ret.push_back(subset);
         }
-        return result;
+
+        return ret;
     }
 };

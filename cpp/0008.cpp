@@ -1,30 +1,41 @@
 class Solution {
 public:
-    int myAtoi(string str) {
-        // var
-        int index = 0;
-        long sign, result = 0;
-        
-        // skip invalid
-        while (str[index] == ' ')
+    int myAtoi(string s) {
+        bool positive = true;
+        long index = 0;
+        long ret = 0;
+
+        while (s[index] == ' ') {
             index++;
-        
-        sign = str[index] == '-' ? -1 : 1;
-        index += issign(str[index]);
-            
-        for (int i = index; i < str.length() && isdigit(str[i]); i++) {
-            result *= 10;
-            result += str[i] - '0';
-            
-            if (sign * result < INT_MIN)
-                return INT_MIN;
-            else if (sign * result > INT_MAX)
-                return INT_MAX;
         }
-        return sign * result;
-    }
-    
-    bool issign(char c) {
-        return c == '-' || c == '+';
+
+        if (s[index] == '-') {
+            positive = false;
+            index++;
+        } else if (s[index] == '+') {
+            positive = true;
+            index++;
+        }
+
+        if (!isdigit(s[index])) {
+            return 0;
+        }
+
+        for (; index < s.length(); index++) {
+            if (isdigit(s[index])) {
+                ret *= 10;
+                ret += (s[index] - '0');
+            } else {
+                break;
+            }
+
+            if (positive && ret > INT_MAX) {
+                return INT_MAX;
+            } else if (!positive && -ret < INT_MIN) {
+                return INT_MIN;
+            }
+        }
+
+        return positive ? ret : -ret;
     }
 };

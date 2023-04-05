@@ -1,30 +1,35 @@
 class Solution {
 public:
     int reverse(int x) {
-        if (abs(x) < 10)
-            return x;
-            
-        // var
-        long long result = 0;
-        vector<int> bits;
-        bool is_positive = x >= 0;
-        
-        if (!is_positive)
-            x *= -1;
-        
-        // split
-        while (x) {
-            bits.push_back(x % 10);
+        bool positive = true;
+        long ret = 0;
+
+        if (x < 0) {
+            if (x < -INT_MAX) {
+                return 0;
+            }
+            positive = false;
+            x = -x;
+        }
+
+        while (x > 0) {
+            ret *= 10;
+            ret += x % 10;
             x /= 10;
+
+            if (positive && ret > INT_MAX) {
+                return 0;
+            } else if (!positive && -ret < INT_MIN) {
+                return 0;
+            }
         }
-        
-        for (int i = 0; i < bits.size(); i++) {
-            result *= 10;
-            result += bits[i];
+
+        ret = positive ? ret : -ret;
+
+        if (ret > INT_MAX || ret < INT_MIN) {
+            return 0;
+        } else {
+            return ret;
         }
-        
-        result = is_positive ? result : -1 * result;
-        
-        return (result < INT_MIN || result >INT_MAX) ? 0 : result;
     }
 };
