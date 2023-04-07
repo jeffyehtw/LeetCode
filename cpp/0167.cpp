@@ -20,8 +20,6 @@ public:
             }
         }
 
-        // cout << left << " " << right << endl;
-
         return ret;
     }
 };

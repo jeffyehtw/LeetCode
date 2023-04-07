@@ -3,30 +3,37 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
-        // var
-        int len = 0;
-        ListNode* it = head;
-        ListNode* end = head;
-        
-        while (end && end->next) {
-            end = end->next;
-            len++;
+        ListNode left;
+        ListNode right;
+        ListNode* l = &left;
+        ListNode* r = &right;
+        bool even = true;
+
+        if (head == NULL) {
+            return NULL;
         }
-        
-        for (int i = 0; i < (len + 1) / 2; i++) {
-            end->next = it->next;
-            it->next = it->next->next;
-            end = end->next;
-            end->next = NULL;
-            it = it->next;
+
+        while (head) {
+            if (even) {
+                l->next = new ListNode(head->val);
+                l = l->next;
+            } else {
+                r->next = new ListNode(head->val);
+                r = r->next;
+            }
+            head = head->next;
+            even = !even;
         }
-        
-        return head;
+        l->next = right.next;
+
+        return left.next;
     }
 };

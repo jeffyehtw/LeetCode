@@ -1,39 +1,51 @@
 class Solution {
+private:
+    int binary(vector<int>& m, int target) {
+        int left = 0;
+        int right = m.size() - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (m[mid] == target) {
+                return mid;
+            } else if (m[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+    int binary2D(vector<vector<int>>& m, int target) {
+        int left = 0;
+        int right = m.size() - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (m[mid][0] > target) {
+                right = mid - 1;
+            } else {
+                if (m[mid].back() < target) {
+                    left = mid + 1;
+                } else {
+                    return mid;
+                }
+            }
+        }
+        
+        return -1;
+    }
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        // skip
-        if (!matrix.size() || !matrix[0].size())
+        int i = binary2D(matrix, target);
+
+        if (i < 0) {
             return false;
-        
-        // var
-        int result = -1;
-        int n = matrix.size();
-        
-        // run
-        for (int i = 1; i < n; i++) {
-            if (matrix[i][0] > target)
-                return binary_search(matrix[i - 1], target) > -1;
         }
-        return binary_search(matrix[n - 1], target) > -1;
-    }
-    
-    int binary_search(vector<int> matrix, int target) {
-        // var
-        int mid;
-        int left = 0;
-        int right = matrix.size() - 1;
         
-        while (left <= right) {
-            // var
-            mid = (left + right) / 2;
-            
-            if (matrix[mid] == target)
-                return mid;
-            else if (matrix[mid] > target)
-                right = mid - 1;
-            else
-                left = mid + 1;
-        }
-        return -1;
+        return (binary(matrix[i], target) > -1) ? true : false;
     }
 };

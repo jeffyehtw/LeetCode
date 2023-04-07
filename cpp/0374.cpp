@@ -1,31 +1,28 @@
-/** 
- * Forward declaration of guess API.
- * @param  num   your guess
- * @return 	     -1 if num is higher than the picked number
- *			      1 if num is lower than the picked number
- *               otherwise return 0
- * int guess(int num);
- */
-
 class Solution {
 public:
-    int guessNumber(int n) {
-        long long left = 1;
-        long long right = n;
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> umap;
+        vector<pair<int, int>> vp;
+        vector<int> ret;
 
-        while (left <= right) {
-            long long mid = (left + right) / 2;
-            int res = guess(mid);
-
-            if (res == 0) {
-                return mid;
-            } else if (res == 1) {
-                left = mid + 1;
+        for (int i = 0; i < nums.size(); i++) {
+            if (umap.find(nums[i]) == umap.end()) {
+                umap[nums[i]] = 1;
             } else {
-                right = mid - 1;
+                umap[nums[i]]++;
             }
         }
 
-        return left;
+        for (auto it = umap.begin(); it != umap.end(); it++) {
+            vp.push_back(pair<int, int>(make_pair(it->first, it->second)));
+        }
+        sort(vp.begin(), vp.end(), [](pair<int, int> p, pair<int, int> q) {
+            return p.second > q.second;
+        });
+        for (int i = 0; i < k; i++) {
+            ret.push_back(vp[i].first);
+        }
+
+        return ret;
     }
 };
