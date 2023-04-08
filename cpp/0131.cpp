@@ -1,33 +1,40 @@
 class Solution {
-public:
-    vector<vector<string>> partition(string s) {
-        // var
-        vector<vector<string>> result;
-        helper(s, vector<string>(), result);
-        return result;
+private:
+    vector<vector<string>> ret;
+    bool palindrome(string s) {
+        int n = s.length() - 1;
+
+        for (int i = 0; i < s.length() / 2; i++) {
+            if (s[i] != s[n - i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
-    
-    void helper(string s, vector<string> current, vector<vector<string>>& result) {
-        if (s.length() == 0) {
-            result.push_back(current);
+    void backtrack(string s, int index, vector<string> ss) {
+        int len = s.length() - index;
+
+        if (len < 0) {
+            return;
+        } else if (len == 0) {
+            ret.push_back(ss);
             return;
         }
-        
-        for (int i = 1; i < s.length() + 1; i++) {
-            // var
-            if (!is_palindrome(s.substr(0, i))) {
-                continue;
+
+        for (int i = 1; i <= len; i++) {
+            string sub(s, index, i);
+            if (palindrome(sub)) {
+                ss.push_back(string(s, index, i));
+                backtrack(s, index + i, ss);
+                ss.pop_back();
             }
-            current.push_back(s.substr(0, i));
-            helper(s.substr(i), current, result);
-            current.pop_back();
         }
     }
-    
-    bool is_palindrome(string s) {
-        for (int i = 0; i < s.length() / 2 + 1; i++)
-            if (s[i] != s[s.length() - 1 - i])
-                return false;
-        return true;
+public:
+    vector<vector<string>> partition(string s) {
+        vector<string> ss;
+        backtrack(s, 0, ss);
+        return ret;
     }
 };
