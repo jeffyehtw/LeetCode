@@ -1,20 +1,36 @@
 class Solution {
 private:
-    set<vector<int>> st;
-    void _permuteUnique(vector<int>& nums, int n) {
-        if (n == nums.size() - 1) {
-            st.insert(nums);
+    vector<vector<int>> ret;
+    vector<bool> used;
+    vector<int> arr;
+    void backtrack(vector<int>& nums) {
+        if (arr.size() == nums.size()) {
+            ret.push_back(arr);
+            return;
         }
 
-        for (int i = n; i < nums.size(); i++) {
-            swap(nums[n], nums[i]);
-            _permuteUnique(nums, n + 1);
-            swap(nums[n], nums[i]);
+        for (int i = 0; i < nums.size(); i++) {
+            if (used[i]) {
+                continue;
+            }
+            if ((i > 0) && (nums[i] == nums[i - 1]) && !used[i - 1]) {
+                continue;
+            }
+            arr.push_back(nums[i]);
+            used[i] = true;
+            backtrack(nums);
+            used[i] = false;
+            arr.pop_back();
         }
     }
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        _permuteUnique(nums, 0);
-        return vector<vector<int>>(st.begin(), st.end());
+        vector<int> tmp;
+        
+        used = vector<bool>(nums.size(), false);
+        sort(nums.begin(), nums.end());
+        backtrack(nums);
+
+        return ret;
     }
 };
