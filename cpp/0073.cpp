@@ -1,22 +1,36 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        // var
-        int n = matrix.size();
-        int m = matrix[0].size();
-        vector<vector<int>> backup(matrix);
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (backup[i][j] == 0) {
-                    // horizon
-                    matrix[i] = vector<int>(m, 0);
-                    
-                    // vertical
-                    for (int k = 0; k < n; k++)
-                        matrix[k][j] = 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<bool> row(m, false);
+        vector<bool> col(n, false);
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    row[i] = true;
+                    col[j] = true;
                 }
             }
         }
+        for (int i = 0; i < m; i++) {
+            if (row[i] == false) {
+                continue;
+            }
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (col[i] == false) {
+                continue;
+            }
+            for (int j = 0; j < m; j++) {
+                matrix[j][i] = 0;
+            }
+        }
+
+        return;
     }
 };
