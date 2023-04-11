@@ -1,8 +1,8 @@
 class Solution {
 private:
-    bool compare(const int t1[], const int t2[]) {
-        for (int i = 0; i < 256; i++) {
-            if (t1[i] != t2[i]) {
+    bool same(vector<int>& cnt) {
+        for (int i = 0; i < cnt.size(); i++) {
+            if (cnt[i] > 0) {
                 return false;
             }
         }
@@ -10,27 +10,26 @@ private:
     }
 public:
     bool checkInclusion(string s1, string s2) {
-        int t1[256] = { 0 };
-        int t2[256] = { 0 };
+        int n = s1.length();
+        vector<int> cnt(26, 0);
 
         if (s1.length() > s2.length()) {
             return false;
         }
 
-        for (int i = 0; i < s1.length(); i++) {
-            t1[s1[i]]++;
-            t2[s2[i]]++;
+        for (int i = 0; i < n; i++) {
+            cnt[s1[i] - 'a']--;
+            cnt[s2[i] - 'a']++;
         }
-
-        if (compare(t1, t2)) {
+        if (same(cnt)) {
             return true;
         }
 
-        for (int i = s1.length(), j = 0; i < s2.length(); i++, j++) {
-            t2[s2[i]]++;
-            t2[s2[j]]--;
+        for (int i = 1; i < s2.length() - n + 1; i++) {
+            cnt[s2[i - 1] - 'a']--;
+            cnt[s2[i + n - 1] - 'a']++;
 
-            if (compare(t1, t2)) {
+            if (same(cnt)) {
                 return true;
             }
         }
