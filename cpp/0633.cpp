@@ -1,14 +1,21 @@
 class Solution {
 public:
     bool judgeSquareSum(int c) {
-        // var
-        map<int, bool> m;
-        
-        for (int i = 0; i <= pow(c, 0.5) + 1; i++) {
-            m[i * i] = true; 
-            if (m[c - i * i])
-                return true;
+        unordered_map<long long, bool> umap;
+
+        if (c <= 1) {
+            return true;
         }
+
+        for (unsigned long i = 1; i <= pow(c, 0.5); i++) {
+            umap[(unsigned long)c - i * i] = true;
+        }
+        for (unsigned long  i = 0; i <= pow(c, 0.5); i++) {
+            if (umap.find(i * i) != umap.end()) {
+                return true;
+            }
+        }
+
         return false;
     }
 };
