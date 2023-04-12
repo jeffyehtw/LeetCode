@@ -1,57 +1,34 @@
 class Solution {
 public:
-    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
-        if (matrix.size() == 0)
-            return vector<int>();
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        vector<int> ret;
+        int m = mat.size();
+        int n = mat[0].size();
+        int x;
+        int y;
         
-        // var
-        int x = 0;
-        int y = 0;
-        int m = matrix.size();
-        int n = matrix[0].size();
-        bool direction = true;
-        vector<int> result;
-        
-        for (int i = 0; i < m * n; i++) {
-            result.push_back(matrix[x][y]);
-            
-            if (direction) {
-                if (x - 1 < 0 && y + 1 > n - 1) {
-                    x++;   
-                    direction = !direction;
+        for (int i = 1; i <= max(m, n) * 2; i++) {
+            if (i % 2 == 0) {
+                x = 0;
+                y = i - 1;
+            } else {
+                x = i - 1;
+                y = 0;
+            }
+            while ((x > -1) && (y > -1)) {
+                if ((x < m) && (y < n)) {
+                    ret.push_back(mat[x][y]);
                 }
-                else if (x - 1 < 0) {
-                    y++;
-                    direction = !direction;
-                }
-                else if (y + 1 > n - 1) {
+                if (i % 2 == 0) {
                     x++;
-                    direction = !direction;
-                }
-                else {
+                    y--;
+                } else {
                     x--;
                     y++;
                 }
             }
-            else {
-                if (x + 1 > m - 1 && y - 1 < 0) {
-                    y++;
-                    direction = !direction;
-                }
-                else if (y - 1 < 0) {
-                    x++;
-                    direction = !direction;
-                }
-                else if (x + 1 > m - 1) {
-                    y++;
-                    direction = !direction;
-                }
-                else {
-                    x++;
-                    y--;
-                }
-            }
         }
-        return result;
+    
+        return ret;
     }
 };

@@ -4,32 +4,30 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    // var
-    vector<vector<int>> result;
-
-    vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        traversal(root, 0);
-        reverse(result.begin(), result.end());
-        return result;
-    }
-    
+private:
+    vector<vector<int>> ret;
     void traversal(TreeNode* root, int level) {
-        if (!root)
+        if (root == NULL) {
             return;
-            
-        // init
-        if (result.empty() || level > result.size() - 1)
-    		result.push_back(vector<int>());
-    	
-    	// add
-        result[level].push_back(root->val);
-        
+        }
+
+        if (level > ret.size()) {
+            ret.push_back(vector<int>());
+        }
+        ret[level - 1].push_back(root->val);
         traversal(root->left, level + 1);
         traversal(root->right, level + 1);
+    }
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        traversal(root, 1);
+        reverse(ret.begin(), ret.end());
+        return ret;
     }
 };
