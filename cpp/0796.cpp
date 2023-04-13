@@ -1,30 +1,30 @@
 class Solution {
 public:
-    bool rotateString(string A, string B) {
-        // var
+    bool rotateString(string s, string goal) {
         int idx = 0;
-        int n = A.length();
-        int m = B.length();
-        
-        if (n == 0 && m == 0)
-            return true;
-        
-        while (idx < B.length() && A[0] != B[idx])
-            idx++;
-        if (idx == B.length())
+        int m = s.length();
+        int n = goal.length();
+
+        if (m != n) {
             return false;
-        
-        while (1) {
-            if (A == B.substr(idx) + B.substr(0, idx))
-                return true;
-            
-            idx++;
-            
-            while (idx < B.length() && A[0] != B[idx])
-                idx++;
-            if (idx == B.length())
-                return false;
+        } else if (s == goal) {
+            return true;
         }
+
+        for (int i = 1; i < m; i++) {
+            string r;
+            if (s[0] != goal[i]) {
+                continue;
+            }
+            
+            r += string(goal.begin() + i, goal.end());
+            r += string(goal.begin(), goal.begin() + i);
+
+            if (s == r) {
+                return true;
+            }
+        }
+
         return false;
     }
 };
