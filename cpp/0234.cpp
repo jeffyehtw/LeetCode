@@ -3,33 +3,30 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-        if (!head)
-            return true;
-            
-        // var
-        ListNode* it = head->next;
-        ListNode* rev_head = new ListNode(head->val);
-        
-        while (it) {
-            // var
-            ListNode* tmp = new ListNode(it->val);
-            tmp->next = rev_head;
-            rev_head = tmp;
-            it = it->next;
+        stack<int> st;
+        ListNode* index = head;
+
+        while (index != NULL) {
+            st.push(index->val);
+            index = index->next;
         }
-        
-        while (head) {
-            if (head->val != rev_head->val)
+        index = head;
+        while (index != NULL) {
+            if (index->val != st.top()) {
                 return false;
-            head = head->next;
-            rev_head = rev_head->next;
+            }
+            st.pop();
+            index = index->next;
         }
+
         return true;
     }
 };
