@@ -1,16 +1,23 @@
 class Solution {
 public:
     int integerBreak(int n) {
-        // var
-        vector<int> v { 0, 0, 1, 2, 4, 6, 9 };
-        
-        if (n < 7)
-            return v[n];
-            
-        for (int i = 7; i <= n; i++) {
-            v.push_back(v[i - 3] * 3);
+        vector<int> dp(n + 1, 1);
+
+        for (int i = 3; i < n; i++) {
+            dp[i] = i;
         }
-        
-        return v[n];
+        if (n <= 2) {
+            return dp[n];
+        }
+        for (int i = 3; i <= n; i++) {
+            for (int j = 1; j < i; j++) {
+                dp[i] = max(
+                    dp[i], 
+                    max(j, dp[j]) * max(i - j, dp[i - j])
+                );
+            }
+        }
+
+        return dp[n];
     }
 };
