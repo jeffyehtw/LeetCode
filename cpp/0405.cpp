@@ -1,69 +1,42 @@
 class Solution {
 public:
     string toHex(int num) {
-        if (num == 0)
+        string ret;
+        char d2h[16] = {
+            '0', '1', '2', '3',
+            '4', '5', '6', '7',
+            '8', '9', 'a', 'b',
+            'c', 'd', 'e', 'f'
+        };
+        unordered_map<char, int> h2d;
+        bool negative = (num >= 0) ? false : true;
+
+        if (num == 0) {
             return "0";
-        
-        // var
-        string result;
-        map<int, char> m;
-        bool non_zero = false;
-        
-        // init
-        for (int i = 0; i < 10; i++)
-            m[i] = '0' + i;
-        for (int i = 10; i < 16; i++)
-            m[i] = 'a' + i - 10;
-            
-        // to binary
-        vector<int> bin = toBin(num);
-        
-        for (int i = 0; i < 8; i++) {
-            // var
-            int sum = 0;
-            for (int j = 0; j < 4; j++) {
-                sum *= 2;
-                sum += bin[i * 4 + j];
+        }
+
+        for (int i = 0; i < 16; i++) {
+            h2d[d2h[i]] = i;
+        }
+        num = abs(num);
+        while (num > 0) {
+            ret = string(1, d2h[num % 16]) + ret;
+            num >>= 4;
+        }
+        if (negative) {
+            int carry = 1;
+            for (int i = 0; i < ret.length(); i++) {
+                ret[i] = d2h[abs(h2d[ret[i]] - 15)];
             }
-            if (sum > 0)
-                non_zero = true;
-            if (non_zero)
-                result += m[sum];
-        }
-        return result;
-    }
-    
-    vector<int> toBin(long num) {
-        // var
-        vector<int> result;
-        bool non_zero = false;
-        bool is_negative = num < 0;
-        
-        // init
-        if (is_negative)
-            num *= -1;
-        
-        while (num) {
-            result.push_back(num % 2);
-            num /= 2;
-        }
-        
-        // fix
-        while (result.size() < 32)
-            result.push_back(0);
-        
-        if (is_negative) {
-            for (int i = 0; i < result.size(); i++) {
-                if (!non_zero && result[i]) {
-                    non_zero = true;
-                    continue;
-                }
-                if (non_zero)
-                    result[i] = result[i] != 1;
+            for (int i = ret.length() - 1; (i > -1) && (carry > 0); i--) {
+                int sum = h2d[ret[i]] + carry;
+                carry = sum / 16;
+                sum %= 16;
+                ret[i] = d2h[sum];
             }
+            ret = string(8 - ret.length(), 'f') + ret;
         }
-        reverse(result.begin(), result.end());
-        
-        return result;
+
+        return ret;
     }
 };
