@@ -3,43 +3,34 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        if (!head)
-            return NULL;
-            
-        // var
-        ListNode* new_head = new ListNode(0);
-        new_head->next = head;
-        
-        // init
-        ListNode* it = new_head->next;
-        ListNode* prev = new_head;
-        
-        while (it && it->next) {
-            // var
-            ListNode* tmp = it->next;
-            
-            // check
-            while (tmp && it->val == tmp->val) {
-                tmp = tmp->next;
+        ListNode fake;
+        ListNode* idx = head;
+        ListNode* prev = &fake;
+
+        fake.next = head;
+        while (idx && idx->next) {
+            if (idx->val == idx->next->val) {
+                ListNode* next = idx->next;
+
+                while (next && idx->val == next->val) {
+                    next = next->next;
+                }
+                prev->next = next;
+                idx = next;
+            } else {
+                prev = idx;
+                idx = idx->next;
             }
-        
-            if (it->next != tmp) {
-                prev->next = tmp;
-                it = tmp;
-            }
-            else {
-                prev = it;
-                it = it->next;
-            }
-            
         }
         
-        return new_head->next;
+        return fake.next;
     }
 };
