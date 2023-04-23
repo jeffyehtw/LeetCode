@@ -1,28 +1,26 @@
 class Solution {
 public:
     bool checkRecord(string s) {
-        // var
-        bool absented = s[0] == 'A';
-        int late = s[0] == 'L';
-        
-        for (int i = 1; i < s.length(); i++) {
-            // late
-            if (s[i] == 'L') {
-                late++;
-                if (late == 3)
+        int absences = 0;
+        int late = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] == 'A') {
+                absences++;
+                late = 0;
+                if (absences >= 2) {
                     return false;
-            }
-            else {
+                }
+            } else if (s[i] == 'L') {
+                late++;
+                if (late >= 3) {
+                    return false;
+                }
+            } else {
                 late = 0;
             }
-            
-            // absent
-            if (s[i] == 'A') {
-                if (absented)
-                    return false;
-                absented = true;
-            }
         }
+
         return true;
     }
 };
