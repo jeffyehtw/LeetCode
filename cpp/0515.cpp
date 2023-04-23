@@ -4,33 +4,33 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
+private:
+    vector<int> ret;
+    void traversal(TreeNode* root, int level) {
+        if (root == NULL) {
+            return;
+        }
+
+        if (level > ret.size()) {
+            ret.push_back(root->val);
+        }
+        ret[level - 1] = max(ret[level - 1], root->val);
+        if (root->left) {
+            traversal(root->left, level + 1);
+        }
+        if (root->right) {
+            traversal(root->right, level + 1);
+        }
+    }
 public:
     vector<int> largestValues(TreeNode* root) {
-        if (!root)
-            return vector<int>();
-        
-        traversal(root, 0);
-        
-        return result;
+        traversal(root, 1);
+        return ret;
     }
-    
-    void traversal(TreeNode* root, int level) {
-        if (!root)
-            return;
-        
-        if (result.empty() || level >= result.size())
-            result.push_back(root->val);
-        else
-            result[level] = max(result[level], root->val);
-            
-        traversal(root->left, level + 1);
-        traversal(root->right, level + 1);
-    }
-    
-    // var
-    vector<int> result;
 };
