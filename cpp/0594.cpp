@@ -1,25 +1,26 @@
 class Solution {
 public:
     int findLHS(vector<int>& nums) {
-        // var
-        int result = 0;
-        map<int, int> m;
-    
-        // init
-        for (int i = 0; i < nums.size(); i++)
-            m[nums[i]]++;
-        
-        for (int i = 0; i < nums.size(); i++) {
-            // var
-            int less = m[nums[i] - 1];
-            int greater = m[nums[i] + 1];
-            int equal = m[nums[i]];
-            
-            if (less == 0 && greater == 0)
-                continue;
-            
-            result = max(result, max(less, greater) + equal);            
+        int ret = 0;
+        int cnt = 1;
+        vector<pair<int, int>> vp;
+
+        sort(nums.begin(), nums.end());
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i - 1] == nums[i]) {
+                cnt++;
+            } else {
+                vp.push_back(make_pair(nums[i - 1], cnt));
+                cnt = 1;
+            }
         }
-        return result;
+        vp.push_back(make_pair(nums.back(), cnt));
+        for (int i = 1; i < vp.size(); i++) {
+            if (vp[i - 1].first + 1 == vp[i].first) {
+                ret = max(ret, vp[i - 1].second + vp[i].second);
+            }
+        }
+
+        return ret;
     }
 };
