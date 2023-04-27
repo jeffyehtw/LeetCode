@@ -1,18 +1,26 @@
 class Solution {
 public:
     int nthUglyNumber(int n) {
-        // var
-        int i = 0;
-        int j = 0;
-        int k = 0;
-        vector<int> dp({ 1 });
-        
-        while (dp.size() < n) {
-            dp.push_back(min(dp[i] * 2, min(dp[j] * 3, dp[k] * 5)));
-            i += dp.back() == dp[i] * 2;
-            j += dp.back() == dp[j] * 3;
-            k += dp.back() == dp[k] * 5;
+        int p2 = 0;
+        int p3 = 0;
+        int p5 = 0;
+        vector<int> ret(1, 1);
+
+        while (ret.size() < n) {
+            ret.push_back(
+                min(ret[p2] * 2, min(ret[p3] * 3, ret[p5] * 5))
+            );
+            if (ret.back() == ret[p2] * 2) {
+                p2++;
+            }
+            if (ret.back() == ret[p3] * 3) {
+                p3++;
+            }
+            if (ret.back() == ret[p5] * 5) {
+                p5++;
+            }
         }
-        return dp[n - 1];
+
+        return ret.back();        
     }
 };
