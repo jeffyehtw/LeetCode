@@ -1,21 +1,18 @@
 class Solution {
 public:
     int trailingZeroes(int n) {
-        // var
-        int tmp;
-        int two = 0;
-        int five = 0;
-        
-        // number of two
-        tmp = n;
-        for (int i = 1; tmp; i++, tmp >>= 1)
-            two += tmp / 2;
-        
-        // number of five
-        tmp = n;
-        for (int i = 1; tmp; i++, tmp /= 5)
-            five += tmp / 5;
-         
-        return min(two, five);
+        int num2 = 0;
+        int num5 = 0;
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; (j > 1) && (j % 2 == 0); j /= 2) {
+                num2++;
+            }
+            for (int j = i; (j > 1) && (j % 5 == 0); j /= 5) {
+                num5++;
+            }
+        }
+
+        return min(num2, num5);
     }
 };
