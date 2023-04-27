@@ -1,18 +1,32 @@
 class Solution {
 public:
     string intToRoman(int num) {
-        // var
-        string result;
-        const string THOUSAND[] = {"", "M", "MM", "MMM"};
-        const string HUNDRED[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-        const string TEN[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-        const string ONE[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-        
-        result += THOUSAND[(num / 1000) % 10];
-        result += HUNDRED[(num / 100) % 10];
-        result += TEN[(num / 10) % 10];
-        result += ONE[num % 10];
-        
-        return result;
+        string ret;
+        vector<pair<int, string>> map = {
+            { 1000, "M" },
+            { 900, "CM" },
+            { 500, "D" },
+            { 400, "CD" },
+            { 100, "C" },
+            { 90, "XC" },
+            { 50, "L" },
+            { 40, "XL" },
+            { 10, "X" },
+            { 9, "IX" },
+            { 5, "V" },
+            { 4, "IV"},
+            { 1, "I" }
+        };
+
+        for (int i = 0; i < map.size() && num > 0; i++) {
+            if (num >= map[i].first) {
+                for (int j = 0; j < num / map[i].first; j++) {
+                    ret += map[i].second;
+                }
+            }
+            num %= map[i].first;
+        }
+
+        return ret;
     }
 };
