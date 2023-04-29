@@ -1,23 +1,31 @@
 class Solution {
 public:
     int nthSuperUglyNumber(int n, vector<int>& primes) {
-        // var
-        int _min = 1;
-        vector<int> dp({ 1 });
-        vector<int> index(primes.size(), 0);
-        
-        while (dp.size() < n) {
-            // var
-            int _min = dp[index[0]] * primes[0];
-            
-            for (int i = 1; i < primes.size(); i++)
-                _min = min(_min, dp[index[i]] * primes[i]);
-            
-            dp.push_back(_min);
-            
-            for (int i = 0; i < primes.size(); i++)
-                index[i] += dp.back() == dp[index[i]] * primes[i];
+        vector<int> last(primes.size(), 0);
+        vector<long> dp;
+
+        if (n == 1) {
+            return 1;
         }
-        return dp[n - 1];
+
+        dp.push_back(1);
+        for (int i = 1; i < n; i++) {
+            long min = primes[0] * dp[last[0]];
+
+            for (int j = 1; j < primes.size(); j++) {
+                if (min > primes[j] * dp[last[j]]) {
+                    min = primes[j] * dp[last[j]];
+                }
+            }
+            for (int j = 0; j < primes.size(); j++) {
+                if (min == primes[j] * dp[last[j]]) {
+                    last[j]++;
+                }
+            }
+
+            dp.push_back(min);
+        }
+
+        return dp.back();
     }
 };
