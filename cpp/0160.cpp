@@ -7,38 +7,47 @@
  * };
  */
 class Solution {
+private:
+    int len(ListNode* head) {
+        int ret = 0;
+
+        if (head == NULL) {
+            return ret;
+        }
+        while (head) {
+            ret++;
+            head = head->next;
+        }
+
+        return ret;
+    }
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        // var
-        int lenA = len(headA);
-        int lenB = len(headB);
-        int max_len = max(lenA, lenB);
-        int min_len = min(lenA, lenB);
-        
-        if (min_len == 0)
+        int alen = len(headA);
+        int blen = len(headB);
+
+        if (min(alen, blen) == 0) {
             return NULL;
-        
-        for (int i = 0; i < max_len - min_len; i++) {
-            if (lenA > min_len)
-                headA = headA->next;
-            if (lenB > min_len)
-                headB = headB->next;
         }
-        
-        while (headA != headB) {
+
+        if (alen > blen) {
+            for (int i = 0; i < alen - blen; i++) {
+                headA = headA->next;
+            }
+        } else {
+            for (int i = 0; i < blen - alen; i++) {
+                headB = headB->next;
+            }
+        }
+
+        while (headA && headB) {
+            if (headA == headB) {
+                return headA;
+            }
             headA = headA->next;
             headB = headB->next;
         }
-        
-        return headA;
-    }
-private:
-    int len(ListNode *head) {
-        int count = 0;
-        while (head != NULL) {
-            head = head->next;
-            count++;
-        }
-        return count;
+
+        return NULL;
     }
 };
