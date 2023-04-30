@@ -1,49 +1,54 @@
 class Solution {
+private:
+    int left(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (nums[mid] == target) {
+                right = mid - 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        if ((left == nums.size()) || (nums[left] != target)) {
+            return -1;
+        } else {
+            return left;
+        }
+    }
+    int right(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (nums[mid] == target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        if ((right < 0) || (nums[right] != target)) {
+            return -1;
+        } else {
+            return right;
+        }
+    }
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        // var
-        int tmp;
-        int left;
-        int right;
-        int middle;
-        
-        // init
-        middle = binary_search(nums, 0, nums.size() - 1, target);
-        
-        // not found
-        if (middle == -1)
-            return vector<int>{ -1, -1 };
-         
-        // find left
-        tmp = middle;
-        while (tmp != -1) {
-            left = tmp;
-            tmp = binary_search(nums, 0, tmp - 1, target);
-        }
-    
-        // find right
-        tmp = middle;   
-        while (tmp != -1) {
-            right = tmp;
-            tmp = binary_search(nums, tmp + 1, nums.size() - 1, target);
-        }
-    
-        return vector<int>{ left, right };
-    }
-    
-    int binary_search(vector<int> nums, int left, int right, int target) {
-        // run
-        while (left <= right) {
-            // var
-            int middle = (left + right) / 2;
-            
-            if (nums[middle] == target)
-                return middle;
-            else if (nums[middle] < target)
-                left = middle + 1;
-            else
-                right = middle - 1;
-        }
-        return -1;
+        return vector<int>({
+            left(nums, target),
+            right(nums, target)
+        });
     }
 };
