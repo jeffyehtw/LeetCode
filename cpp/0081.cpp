@@ -1,47 +1,43 @@
 class Solution {
-public:
-    bool search(vector<int>& nums, int target) {
-        if (nums.size() == 0)
-            return false;
-        
-        // var
-        vector<int> v;
-        int index = -1;
-        
-        // init
-        for (int i = 0; i < nums.size() - 1; i++) {
-            if (nums[i] > nums[i + 1]) {
-                index = i;
-                break;
+private:
+    bool binary(vector<int>& nums, int left, int right, int target) {
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (nums[mid] == target) {
+                return true;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
-        
-        if (nums[0] > target)
-            v = vector<int>(nums.begin() + index + 1, nums.end());
-        else if (nums[0] < target)
-            v = vector<int>(nums.begin(), nums.begin() + index + 1);
-        else
-            return true;
-            
-        return index > -1 ? binary_search(v, target) : binary_search(nums, target);
+        return false;
     }
-    
-    bool binary_search(vector<int> nums, int target) {
-        // var
-        int left = 0;
-        int right = nums.size() - 1;
-        
-        while (left <= right) {
-            // var
-            int middle = (left + right) / 2;
-            
-            if (nums[middle] == target)
-                return true;
-            else if (nums[middle] > target)
-                right = middle - 1;
-            else
-                left = middle + 1;
+public:
+    bool search(vector<int>& nums, int target) {
+        int max = nums[0];
+        int idx = 0;
+
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] < nums[i - 1]) {
+                idx = i - 1;
+                max = nums[i - 1];
+            }
         }
+
+        if (idx == nums.size() - 1) {
+            return binary(nums, 0, idx, target);
+        }
+
+        if (((target >= nums[0]) && (target <= max))
+            && binary(nums, 0, idx, target)) {
+            return true;
+        } else if ((target >= nums[idx + 1] && (target <= nums.back()))
+            && binary(nums, idx + 1, nums.size() - 1, target)) {
+            return true;
+        }
+
         return false;
     }
 };
