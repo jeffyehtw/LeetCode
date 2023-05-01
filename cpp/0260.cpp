@@ -1,23 +1,20 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        // var
-        vector<int> result;
-        
-        sort(nums.begin(), nums.end());
-        
-        for (int i = 1; i < nums.size() && result.size() < 2; ) {
-            if (nums[i - 1] != nums[i]) {
-                result.push_back(nums[i - 1]);
-                i++;
+        vector<int> ret;
+        unordered_map<int, int> umap;
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (umap.find(nums[i]) == umap.end()) {
+                umap[nums[i]] = 1;
+            } else {
+                umap.erase(nums[i]);
             }
-            else
-                i += 2;
         }
-        
-        if (result.size() == 1)
-            result.push_back(nums.back());
-        
-        return result;
+        for (auto it = umap.begin(); it != umap.end(); it++) {
+            ret.push_back((*it).first);
+        }
+
+        return ret;
     }
 };
