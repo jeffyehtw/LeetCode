@@ -1,21 +1,28 @@
 class Solution {
+private:
     vector<vector<int>> ret;
-    void _combine(vector<int> nums, int idx, int n, int k) {
-        if (k == 0) {
-            ret.push_back(nums);
-            return;
-        } else if (idx > n || n - idx + 1 < k) {
+    vector<int> cur;
+    void backtrack(vector<int>& nums, int idx, int k) {
+        if (cur.size() == k) {
+            ret.push_back(cur);
             return;
         }
-        
-        _combine(nums, idx + 1, n, k);
-        nums.push_back(idx);
-        _combine(nums, idx + 1, n, k - 1);
+
+        for (int i = idx; i < nums.size(); i++) {
+            cur.push_back(nums[i]);
+            backtrack(nums, i + 1, k);
+            cur.pop_back();
+        }
     }
 public:
     vector<vector<int>> combine(int n, int k) {
-        vector<int> tmp;
-        _combine(tmp, 1, n, k);
+        vector<int> nums;
+
+        for (int i = 1; i <= n; i++) {
+            nums.push_back(i);
+        }
+        backtrack(nums, 0, k);
+
         return ret;
     }
 };
