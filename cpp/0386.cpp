@@ -1,23 +1,20 @@
 class Solution {
+private:
+    vector<int> ret;
+    void help(int idx, int n) {
+        if (idx > n) {
+            return;
+        }
+        ret.push_back(idx);
+        for (int i = 0; i <= 9; i++) {
+            help(idx * 10 + i, n);
+        }
+    }
 public:
     vector<int> lexicalOrder(int n) {
-        
-        recursive(1, n);
-        
-        return result;
+        for (int i = 1; i <= 9; i++) {
+            help(i, n);
+        }
+        return ret;
     }
-    
-    void recursive(int current, int n) {
-        if (current > n)
-            return;
-        
-        result.push_back(current);    
-        recursive(current * 10, n);
-        
-        if (current % 10 != 9)
-            recursive(current + 1, n);
-    }
-    
-    // var
-    vector<int> result;
 };
