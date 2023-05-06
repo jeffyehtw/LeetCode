@@ -1,36 +1,37 @@
 class Solution {
 public:
     string originalDigits(string s) {
-        // var
-        string result = "";
-        vector<int> count(26, 0);
-        vector<int> order{ 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
-        vector<pair<char, string>> pattern {
-            pair<char, string>('z', "zero"),
-            pair<char, string>('w', "two"),
-            pair<char, string>('u', "four"),
-            pair<char, string>('x', "six"),
-            pair<char, string>('g', "eight"),
-            pair<char, string>('o', "one"),
-            pair<char, string>('r', "three"),
-            pair<char, string>('f', "five"),
-            pair<char, string>('v', "seven"),
-            pair<char, string>('i', "nine")
+        string ret = "";
+        vector<int> c(26, 0);
+        vector<pair<string, char>> vp = {
+            {"zero", '0'},
+            {"xsi", '6'},
+            {"geiht", '8'},
+            {"seven", '7'},
+            {"vfie", '5'},
+            {"four", '4'},
+            {"wto", '2'},
+            {"three", '3'},
+            {"one", '1'},
+            {"inne", '9'}
         };
-        
-        for (int i = 0; i < s.length(); i++)
-            count[s[i] - 'a']++;
-        
-        for (int i = 0; i < 10; i++) {
-            // var
-            int n = count[pattern[i].first - 'a']; 
-            for (int j = 0; j < pattern[i].second.length(); j++)
-                count[pattern[i].second[j] - 'a'] -= n;
-            result += string(n, char(order[i] + '0'));
+
+        for (int i = 0; i < s.length(); i++) {
+            c[s[i] - 'a']++;
         }
-        
-        sort(result.begin(), result.end());
-        
-        return result;
+        for (int i = 0; i < vp.size(); i++) {
+            int cnt = c[vp[i].first[0] - 'a'];
+
+            if (cnt <= 0) {
+                continue;
+            }
+            ret += string(c[vp[i].first[0] - 'a'], vp[i].second);
+            for (int j = 0; j < vp[i].first.length(); j++) {
+                c[vp[i].first[j] - 'a'] -= cnt;
+            }
+        }
+        sort(ret.begin(), ret.end());
+
+        return ret;
     }
 };
