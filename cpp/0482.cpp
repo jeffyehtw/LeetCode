@@ -1,26 +1,28 @@
 class Solution {
 public:
-    string licenseKeyFormatting(string S, int K) {
-        // var
-        int num;
-        int index = S.find('-');
-        
-        // remove '-'
-        for (int i = 0; i < S.length(); ) {
-            // format
-            S[i] = isalpha(S[i]) ? toupper(S[i]) : S[i];
-            
-            if (S[i] == '-')
-                S.erase(S.begin() + i);
-            else
-                i++;
+    string licenseKeyFormatting(string s, int k) {
+        string ret = "";
+        string valid = "";
+        int idx;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (isalpha(s[i])) {
+                valid += string(1, toupper(s[i]));
+            } else if (isdigit(s[i])) {
+                valid += string(1, s[i]);
+            }
         }
-        
-        num = ceil(double(S.length()) / K);
-        for (int i = 0; i < num - 1; i++) {
-            S.insert(S.end() - K * (i + 1) - i, '-');
+        if (valid.length() % k == 0) {
+            idx = k;
+        } else {
+            idx = valid.length() % k;
         }
-        
-        return S;
+        ret += string(valid, 0, idx);
+
+        for (; idx < valid.length(); idx += k) {
+            ret += "-" + string(valid, idx, k);
+        }
+
+        return ret;
     }
 };
