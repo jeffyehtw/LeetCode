@@ -3,45 +3,38 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* insertionSortList(ListNode* head) {
-        if (!head)
-            return head;
-        
-        // var
-        ListNode* prev;
-        ListNode* index;
-        ListNode* new_head = new ListNode(0);
-        
-        // init
-        prev = head;
-        index = head->next;
-        new_head->next = head;
-       
-        while (index) {
-            // var
-            bool ok = false;
-            ListNode* tmp = new_head;
-            
-            while(tmp->next != index) {
-                if (index->val <= tmp->next->val) {
-                    prev->next = index->next;
-                    index->next = tmp->next;
-                    tmp->next = index;
-                    ok = true;
-                    break;
+        ListNode fake;
+        ListNode* idx = head;
+        ListNode* prev = NULL;
+
+        fake.next = head;
+        while (idx) {
+            if ((prev == NULL) || (idx->val >= prev->val)) {
+                prev = idx;
+                idx = idx->next;
+            } else {
+                ListNode* pos = &fake;
+
+                while ((pos->next)
+                    && (pos->next != idx)
+                    && (pos->next->val < idx->val)) {
+                    pos = pos->next;
                 }
-                tmp = tmp->next;
+                prev->next = idx->next;
+                idx->next = pos->next;
+                pos->next = idx;
+                idx = prev->next;                
             }
-            
-            // update
-            index = ok ? prev->next : index->next;
-            prev = ok ? prev : prev->next;
         }
-        return new_head->next;
+
+        return fake.next;
     }
 };
