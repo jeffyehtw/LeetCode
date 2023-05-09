@@ -1,42 +1,40 @@
 class Solution {
 public:
     string simplifyPath(string path) {
-        // var 
-        string result;
-        vector<string> tmp;
-        vector<string> splits = split(path, '/');
-        
-        // run
-        for (int i = 0; i < splits.size(); i++) {
-            if (splits[i] == ".")
-                continue;
-            else if (splits[i] == "..") {
-                if (!tmp.empty())
-                    tmp.pop_back();
+        vector<string> v;
+        string cur = "";
+        string ret = "";
+        int start = 1;
+        int len = 0;
+
+        for (int i = 1; i < path.length(); i++) {
+            if (path[i] == '/') {
+                cur = string(path, start, len);
+                if (cur == "..") {
+                    if (v.size() > 0) {
+                        v.pop_back();
+                    }
+                } else if ((cur.length() > 0) && cur != ".") {
+                    v.push_back(cur);
+                }
+                start = i + 1;
+                len = 0;
+                cur = "";
+            } else {
+                len++;
             }
-            else
-                tmp.push_back(splits[i]);
+        }
+        cur = string(path, start, len);
+        if ((cur == "..") && (v.size() > 0)) {
+            v.pop_back();
+        } else if ((cur != "..") && (cur != ".") && (len > 0)) {
+            v.push_back(cur);
         }
         
-        // merge
-        for (int i = 0; i < tmp.size(); i++)
-            result += "/" + tmp[i];
-            
-        return result.length() == 0 ? "/" : result;   
-    }
-    
-    vector<string> split(const string &str, const char &delim)
-    {
-        // var
-        string token;
-        stringstream ss(str);
-        vector<string> result;
-        
-        // run
-        while (getline(ss, token, delim))
-        if (token.length() > 0)
-            result.push_back(token);
-            
-        return result;
+        for (int i = 0; i < v.size(); i++) {
+            ret += "/" + v[i];
+        }
+
+        return (ret.length() == 0) ? "/" : ret;
     }
 };
