@@ -1,65 +1,50 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        if (matrix.empty() || matrix[0].empty())
-            return vector<int>();
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<vector<bool>> seen(m, vector<bool>(n, false));
+        vector<int> ret;
+        int i = 0;
+        int j = 0;
+        /* 0: >, 1: v, 2: <, 3: ^ */
+        int dir = 0;
+        
+        while (ret.size() < m * n) {
+            seen[i][j] = true;
+            ret.push_back(matrix[i][j]);
             
-        // var
-        int x = 0;
-        int y = 0;
-        int up = 0;
-        int down = matrix.size() - 1;
-        int left = 0;
-        int right = matrix[0].size() - 1;
-        int direction = 0;
-        
-        vector<int> result;
-        
-        while (left <= right && up <= down) {
-            result.push_back(matrix[x][y]);
-            switch(direction) {
-                // right
-                case 0:
-                    if (y < right)
-                        y++;
-                    else {
-                        x++;
-                        up++;
-                        direction = 1;
-                    }
-                    break;
-                // down
-                case 1:
-                    if (x < down)
-                        x++;
-                    else {
-                        y--;
-                        right--;
-                        direction = 2;
-                    }
-                    break;
-                // left
-                case 2:
-                    if (y > left)
-                        y--;
-                    else {
-                        x--;
-                        down--;
-                        direction = 3;
-                    }
-                    break;
-                // up
-                case 3:
-                    if (x > up)
-                        x--;
-                    else {
-                        y++;
-                        left++;
-                        direction = 0;
-                    }
-                    break;
+            if (dir == 0) {
+                if ((j + 1 < n) && !seen[i][j + 1]) {
+                    j++;
+                } else {
+                    dir = 1;
+                    i++;
+                }
+            } else if (dir == 1) {
+                if ((i + 1 < m) && !seen[i + 1][j]) {
+                    i++;
+                } else {
+                    dir = 2;
+                    j--;
+                }
+            } else if (dir == 2) {
+                if ((j - 1 > -1) && !seen[i][j - 1]) {
+                    j--;
+                } else {
+                    dir = 3;
+                    i--;
+                }
+            } else if (dir == 3) {
+                if ((i - 1 > -1) && !seen[i - 1][j]) {
+                    i--;
+                } else {
+                    dir = 0;
+                    j++;
+                }
             }
         }
-        return result;
+
+        return ret;
     }
 };
