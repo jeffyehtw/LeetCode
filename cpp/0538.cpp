@@ -11,24 +11,24 @@
  */
 class Solution {
 private:
-    int sum = 0;
-    void traversal(TreeNode* root) {
-        if (root == NULL) {
-            return;
-        }
-
-        if (root->right) {
-            traversal(root->right);
-        }
-        sum += root->val;
-        root->val = sum;
-        if (root->left) {
-            traversal(root->left);
-        }
-    }
+    int acc = 0;
 public:
     TreeNode* convertBST(TreeNode* root) {
-        traversal(root);
-        return root;
+        TreeNode* ret = NULL;
+
+        if (root == NULL) {
+            return ret;
+        }
+        ret = new TreeNode(0);
+        if (root->right) {
+            ret->right = convertBST(root->right);
+        }
+        acc += root->val;
+        ret->val = acc;
+        if (root->left) {
+            ret->left = convertBST(root->left);
+        }
+
+        return ret;
     }
 };
