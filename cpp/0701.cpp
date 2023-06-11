@@ -10,31 +10,24 @@
  * };
  */
 class Solution {
-private:
-    void insert(TreeNode* root, int val) {
-        if (root == NULL) {
-            return;
-        }
-        if (val < root->val) {
-            if (root->left) {
-                insert(root->left, val);
-            } else {
-                root->left = new TreeNode(val);
-            }
-        } else {
-            if (root->right) {
-                insert(root->right, val);
-            } else {
-                root->right = new TreeNode(val);
-            }
-        }
-    }
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val) {
+        TreeNode* ret = NULL;
+
         if (root == NULL) {
-            return new TreeNode(val);
+            ret = new TreeNode(val);
+            return ret;
         }
-        insert(root, val);
-        return root;
+
+        ret = new TreeNode(root->val);
+        if (root->val > val) {
+            ret->left = insertIntoBST(root->left, val);
+            ret->right = root->right;
+        } else {
+            ret->left = root->left;
+            ret->right = insertIntoBST(root->right, val);
+        }
+
+        return ret;
     }
 };
