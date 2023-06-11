@@ -1,51 +1,49 @@
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        // var
+        vector<vector<int>> ret;
         int n = nums.size();
-        vector<vector<int>> result;
-        
-        if (n < 4)
-            return result;
-        
-        // init
+
+        if (n < 4) {
+            return ret;
+        }
+
         sort(nums.begin(), nums.end());
-        
-        // run
+
         for (int i = 0; i < n - 3; i++) {
-            if (i > 0 && nums[i] == nums[i - 1])
-                    continue;
-                    
+            if ((i > 0) && (nums[i - 1] == nums[i])) {
+                continue;
+            }
             for (int j = i + 1; j < n - 2; j++) {
-                if (j > i + 1 && nums[j] == nums[j - 1])
-                    continue;
-                
-                // var
                 int left = j + 1;
                 int right = n - 1;
-                
+                long val = (long)target - nums[i] - nums[j];
+
+                if ((j > i + 1) && (nums[j - 1] == nums[j])) {
+                    continue;
+                }
                 while (left < right) {
-                    // var
-                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
-                    
-                    if (sum == target) {
-                        result.push_back({ nums[i], nums[j], nums[left], nums[right] });
+                    if (nums[left] + nums[right] == val) {
+                        ret.push_back({ 
+                            nums[i], nums[j], nums[left], nums[right] 
+                        });
                         left++;
-                        right--;
-                        
-                        // shift
-                        while (left < right && nums[left - 1] == nums[left])
+                        while ((left < right) && (nums[left - 1] == nums[left])) {
                             left++;
-                        while (right > left && nums[right] == nums[right + 1])
-                            right--;
-                    }
-                    else if (sum > target)
+                        }
                         right--;
-                    else
+                        while ((left < right) && (nums[right] == nums[right + 1])) {
+                            right--;
+                        }
+                    } else if (nums[left] + nums[right] > val) {
+                        right--;
+                    } else {
                         left++;
+                    }
                 }
             }
         }
-        return result;
+
+        return ret;
     }
 };
