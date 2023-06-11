@@ -11,46 +11,38 @@
  */
 class Solution {
 private:
+    int h;
     vector<vector<string>> ret;
     int height(TreeNode* root) {
         if (root == NULL) {
             return 0;
         }
-        return 1 + max(height(root->left), height(root->right));
+        return 1 + max(
+            height(root->left), 
+            height(root->right)
+        );
     }
-    void travel(TreeNode* root, int level, int* index, int height) {
-        if (root == NULL || level > height) {
+    void traversal(TreeNode* root, int r, int c) {
+        if (root == NULL) {
             return;
         }
-
+        ret[r][c] = to_string(root->val);
         if (root->left) {
-            travel(root->left, level + 1, index, height);       
-        } else if (level < height) {
-            *index = *index + (1 << (height - level)) - 1;
+            traversal(root->left, r + 1, c - (1 << (h - r - 1)));
         }
-        ret[level - 1][*index] = to_string(root->val);
-        *index = *index + 1;
         if (root->right) {
-            travel(root->right, level + 1, index, height);       
-        } else if (level < height) {
-            *index = *index + (1 << (height - level)) - 1;
+            traversal(root->right, r + 1, c + (1 << (h - r - 1)));
         }
     }
-
 public:
     vector<vector<string>> printTree(TreeNode* root) {
-        int h = 0;
-        int w = 0;
-        int index = 0;
+        int m = height(root);
+        int n = (1 << m) - 1;
+        ret = vector<vector<string>>(m, vector<string>(n, ""));
 
-        if (root == NULL) {
-            return ret;
-        }
+        h = m - 1;
 
-        h = height(root);
-        w = (1 << h) - 1;
-        ret = vector<vector<string>>(h, vector<string>(w, ""));
-        travel(root, 1, &index, h);
+        traversal(root, 0, (n - 1) / 2);
 
         return ret;
     }
