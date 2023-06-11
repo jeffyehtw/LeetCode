@@ -11,31 +11,37 @@
  */
 class Solution {
 private:
-    TreeNode* _constructMaximumBinaryTree(vector<int>& nums, int left, int right) {
-        int max = -1;
-        int idx = -1;
+    TreeNode* help(vector<int>& nums, int left, int right) {
+        int mid = 0;
+        int max = INT_MIN;
         TreeNode* ret = NULL;
 
         if (left > right) {
             return ret;
         }
-
         for (int i = left; i <= right; i++) {
             if (nums[i] > max) {
                 max = nums[i];
-                idx = i;
+                mid = i;
             }
         }
 
         ret = new TreeNode(max);
+        if (left == right) {
+            return ret;
+        }
 
-        ret->left = _constructMaximumBinaryTree(nums, left, idx - 1);
-        ret->right = _constructMaximumBinaryTree(nums, idx + 1, right);
+        if (mid > left) {
+            ret->left = help(nums, left, mid - 1);
+        }
+        if (right > mid) {
+            ret->right = help(nums, mid + 1, right);
+        }
 
         return ret;
     }
 public:
     TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
-        return _constructMaximumBinaryTree(nums, 0, nums.size() - 1);
+        return help(nums, 0, nums.size() - 1);
     }
 };
