@@ -1,27 +1,28 @@
 class Solution {
 private:
     vector<string> ret;
-    void backtrack(string s, int idx) {
+    string cur = "";
+    void help(string s, int idx) {
         if (idx == s.length()) {
-            ret.push_back(s);
+            ret.push_back(cur);
             return;
         }
-
-        if ((s[idx] >= 'a') && (s[idx] <= 'z')) {
-            backtrack(s, idx + 1);
-            s[idx] = toupper(s[idx]);
-            backtrack(s, idx + 1);
-        } else if ((s[idx] >= 'A') && (s[idx] <= 'Z')) {
-            backtrack(s, idx + 1);
-            s[idx] = tolower(s[idx]);
-            backtrack(s, idx + 1);
+        if (isdigit(s[idx])) {
+            cur += string(1, s[idx]);
+            help(s, idx + 1);
+            cur.pop_back();
         } else {
-            backtrack(s, idx + 1);
+            cur += string(1, tolower(s[idx]));
+            help(s, idx + 1);
+            cur.pop_back();
+            cur += string(1, toupper(s[idx]));
+            help(s, idx + 1);
+            cur.pop_back();
         }
     }
 public:
     vector<string> letterCasePermutation(string s) {
-        backtrack(s, 0);
+        help(s, 0);
         return ret;
     }
 };
