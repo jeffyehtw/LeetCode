@@ -4,38 +4,34 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    //var
-    vector<vector<int>> result;
-    
-    vector<vector<int>> pathSum(TreeNode* root, int sum) {
-        if (!root)
-            return vector<vector<int>>();
-            
-        traversal(root, vector<int>(), sum);    
-        
-        return result;
-    }
-    
-    void traversal(TreeNode* root, vector<int> path, int sum) {
-        if (!root)
+private:
+    vector<int> cur;
+    vector<vector<int>> ret;
+    void traverse(TreeNode* root, int target) {
+        if (root == NULL) {
             return;
-        
-        // init
-        path.push_back(root->val);
-        
-        if (!root->left && !root->right) {
-            if (root->val == sum)
-                result.push_back(path);
-            else
-                return;
         }
-        
-        traversal(root->left, path, sum - root->val);
-        traversal(root->right, path, sum - root->val);
+
+        if (root->left || root->right) {
+            cur.push_back(root->val);
+            traverse(root->left, target - root->val);
+            traverse(root->right, target - root->val);
+            cur.pop_back();
+        } else if (root->val == target) {
+            cur.push_back(root->val);
+            ret.push_back(cur);
+            cur.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        traverse(root, targetSum);
+        return ret;
     }
 };

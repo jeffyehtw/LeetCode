@@ -1,23 +1,22 @@
 class Solution {
 private:
-    vector<vector<int>> ret;
     vector<int> cur;
+    vector<vector<int>> ret;
     vector<bool> used;
-    void backtrack(vector<int>& nums, int idx) {
-        if (idx == nums.size()) {
+    void backtrack(vector<int>& num, int idx) {
+        if (idx == num.size()) {
             ret.push_back(cur);
             return;
         }
-
-        for (int i = 0; i < nums.size(); i++) {
+        for (int i = 0; i < num.size(); i++) {
             if (used[i]) {
                 continue;
             }
-            cur.push_back(nums[i]);
+            cur.push_back(num[i]);
             used[i] = true;
-            backtrack(nums, idx + 1);
-            cur.pop_back();
+            backtrack(num, idx + 1);
             used[i] = false;
+            cur.pop_back();
         }
     }
 public:
