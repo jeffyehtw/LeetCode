@@ -1,40 +1,33 @@
 class Solution {
 private:
+    vector<string> cur;
     vector<vector<string>> ret;
     bool palindrome(string s) {
-        int n = s.length() - 1;
-
         for (int i = 0; i < s.length() / 2; i++) {
-            if (s[i] != s[n - i]) {
+            if (s[i] != s[s.length() - 1 - i]) {
                 return false;
             }
         }
-
         return true;
     }
-    void backtrack(string s, int index, vector<string> ss) {
-        int len = s.length() - index;
-
-        if (len < 0) {
-            return;
-        } else if (len == 0) {
-            ret.push_back(ss);
+    void backtrack(string s, int idx) {
+        if (idx == s.length()) {
+            ret.push_back(cur);
             return;
         }
-
-        for (int i = 1; i <= len; i++) {
-            string sub(s, index, i);
+        for (int i = 1; i <= s.length() - idx; i++) {
+            string sub = string(s, idx, i);
+            
             if (palindrome(sub)) {
-                ss.push_back(string(s, index, i));
-                backtrack(s, index + i, ss);
-                ss.pop_back();
+                cur.push_back(sub);
+                backtrack(s, idx + i);
+                cur.pop_back();
             }
         }
     }
 public:
     vector<vector<string>> partition(string s) {
-        vector<string> ss;
-        backtrack(s, 0, ss);
+        backtrack(s, 0);
         return ret;
     }
 };
