@@ -22,15 +22,6 @@ public:
             ret = max(ret, dpmax[i]);
         }
 
-        for (int i = 0; i < nums.size(); i++) {
-            cout << dpmin[i] << " ";
-        }
-        cout << endl;
-        for (int i = 0; i < nums.size(); i++) {
-            cout << dpmax[i] << " ";
-        }
-        cout << endl;
-
         return ret;
     }
 };
