@@ -12,36 +12,23 @@
 class Solution {
 private:
     int ret = INT_MIN;
-    int _maxAncestorDiff(TreeNode* root, int min, int max) {
-        int left;
-        int right;
-
+    void traverse(TreeNode* root, int _min, int _max) {
         if (root == NULL) {
-            return -1;
+            return;
         }
-
-        if (root->val - min > ret) {
-            ret = root->val - min;
-        }
-        if (max > ret + root->val) {
-            ret = max - root->val;
-        }
-
-        if (root->val < min) {
-            min = root->val;
-        }
-        if (root->val > max) {
-            max = root->val;
-        }
-
-        left = _maxAncestorDiff(root->left, min, max);
-        right = _maxAncestorDiff(root->right, min, max);
-
-        return (left > right) ? left : right;
+        ret = max({
+            ret, 
+            abs(root->val - _min), 
+            abs(root->val - _max)
+        });
+        _min = min(_min, root->val);
+        _max = max(_max, root->val);
+        traverse(root->left, _min, _max);
+        traverse(root->right, _min, _max);
     }
 public:
     int maxAncestorDiff(TreeNode* root) {
-        _maxAncestorDiff(root, INT_MAX, INT_MIN);
+        traverse(root, root->val, root->val);
         return ret;
     }
 };
