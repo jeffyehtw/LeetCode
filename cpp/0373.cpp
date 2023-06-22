@@ -1,26 +1,32 @@
 class Solution {
 public:
-    vector<pair<int, int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
-        // var
-        vector<pair<int, int>> result;
-        vector<pair<int, pair<int, int>>> v;
-        int m = nums1.size() > k ? k : nums1.size();
-        int n = nums2.size() > k ? k : nums2.size();
-        
-        if (!m || !n)
-            return result;
-        
-        // init
-        for (int i = 0; i < m; i++)
-        for (int j = 0; j < n; j++)
-            v.push_back(make_pair(nums1[i] + nums2[j], make_pair(nums1[i], nums2[j])));
-        
-        sort(v.begin(), v.end());
-        
-        // format
-        for (int i = 0; i < (v.size() > k ? k : v.size()); i++)
-            result.push_back(v[i].second);
-            
-        return result;
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<vector<int>> ret;
+        priority_queue<pair<int, int>> pq;
+
+        for (int i = 0; i < nums1.size(); i++) {
+            for (int j = 0; j < nums2.size(); j++) {
+                int sum = nums1[i] + nums2[j];
+                
+                if (pq.size() < k) {
+                    pq.push({ nums1[i] + nums2[j], nums1[i] });
+                } else if (sum < pq.top().first) {
+                    pq.pop();
+                    pq.push({ nums1[i] + nums2[j], nums1[i] });
+                } else {
+                    break;
+                }
+            }
+        }
+
+        while (!pq.empty() && (k > 0)) {
+            ret.push_back({
+                pq.top().second,
+                pq.top().first - pq.top().second,
+            });
+            pq.pop();
+        }
+
+        return ret;
     }
 };
