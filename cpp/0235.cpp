@@ -9,42 +9,25 @@
  */
 
 class Solution {
-private:
-    vector<pair<TreeNode*, int>> nodes;
-    void traversal(TreeNode* root, int idx) {
-        if (root == NULL) {
-            return;
-        }
-        traversal(root->left, (idx << 1));
-        nodes.push_back(make_pair(root, idx));
-        traversal(root->right, (idx << 1) + 1);
-    }
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        int idxp = -1;
-        int idxq = -1;
-
-        traversal(root, 1);
-        for (int i = 0; i < nodes.size(); i++) {
-            if (nodes[i].first->val == p->val) {
-                idxp = nodes[i].second;
-            } else if (nodes[i].first->val == q->val) {
-                idxq = nodes[i].second;
-            }
-        }
-        while (idxp != idxq) {
-            if (idxp > idxq) {
-                idxp >>= 1;
-            } else {
-                idxq >>= 1;
-            }
-        }
-        for (int i = 0; i < nodes.size(); i++) {
-            if (nodes[i].second == idxp) {
-                return nodes[i].first;
-            }
+        TreeNode* left;
+        TreeNode* right;
+        
+        if (root == NULL) {
+            return NULL;
+        } else if ((root == p) || (root == q)) {
+            return root;
         }
 
-        return NULL;
+        left = lowestCommonAncestor(root->left, p, q);
+        right = lowestCommonAncestor(root->right, p, q);
+        if ((left == NULL) && (right == NULL)) {
+            return NULL;
+        } else if (left && right) {
+            return root;
+        } else {
+            return (left == NULL) ? right : left;
+        }
     }
 };
