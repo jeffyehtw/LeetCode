@@ -1,45 +1,46 @@
 class Solution {
+private:
+    int ret = 0;
+    int cur = 0;
+    int m;
+    int n;
+    vector<vector<bool>> visited;
+    void traverse(vector<vector<int>>& g, int x, int y) {
+        if ((x < 0) || (x >= m) || (y < 0) || (y >= n)) {
+            return;
+        } else if (visited[x][y]) {
+            return;
+        } else if (g[x][y] == 0) {
+            visited[x][y] = true;
+            return;
+        }
+        cur++;
+        visited[x][y] = true;
+        traverse(g, x - 1, y);
+        traverse(g, x, y - 1);
+        traverse(g, x, y + 1);
+        traverse(g, x + 1, y);
+    }
 public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        if (grid.size() == 0)
-            return 0;
+        m = grid.size();
+        n = grid[0].size();
+        visited = vector<vector<bool>>(m, vector<bool>(n, false));
         
-        // var
-        int r = 0;
-        int n = grid.size();
-        int m = grid[0].size();
-        vector<vector<bool>> tagged;
-        
-        // init
-        tagged = vector<vector<bool>>(n, vector<bool>(m, false));
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == 0 || tagged[i][j])
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (visited[i][j]) {
                     continue;
-                
-                r = max(r, discover(i, j, grid, tagged));
+                } else if (grid[i][j] == 0) {
+                    visited[i][j] = true;
+                } else {
+                    cur = 0;
+                    traverse(grid, i, j);
+                    ret = max(ret, cur);
+                }
             }
         }
-        
-        return r;
-    }
-    
-    int discover(int x, int y, vector<vector<int>>& grid, vector<vector<bool>>& tagged) {
-        // var
-        int r = 1;
-        
-        tagged[x][y] = true;
-        
-        if (x > 0 && !tagged[x - 1][y] && grid[x - 1][y] == 1)
-            r += discover(x - 1, y, grid, tagged);
-        if (x < grid.size() - 1 && !tagged[x + 1][y] && grid[x + 1][y] == 1)
-            r += discover(x + 1, y, grid, tagged);
-        if (y > 0 && !tagged[x][y - 1] && grid[x][y - 1] == 1)
-            r += discover(x, y - 1, grid, tagged);
-        if (y < grid[0].size() - 1 && !tagged[x][y + 1] && grid[x][y + 1] == 1)
-            r += discover(x, y + 1, grid, tagged);
-        
-        return r;
+
+        return ret;
     }
 };
