@@ -1,63 +1,55 @@
 class Solution {
+private:
+    int x = 0;
+    int y = -1;
+    int idx = 1;
+    void up(vector<vector<int>>& m) {
+        x--;
+        while ((x > -1) && (m[x][y] == 0)) {
+            m[x][y] = idx;
+            x--;
+            idx++;
+        }
+        x++;
+    }
+    void down(vector<vector<int>>& m) {
+        x++;
+        while ((x < m.size()) && (m[x][y] == 0)) {
+            m[x][y] = idx;
+            x++;
+            idx++;
+        }
+        x--;
+    }
+    void left(vector<vector<int>>& m) {
+        y--;
+        while ((y > -1) && (m[x][y] == 0)) {
+            m[x][y] = idx;
+            y--;
+            idx++;
+        }
+        y++;
+    }
+    void right(vector<vector<int>>& m) {
+        y++;
+        while ((y < m[0].size()) && (m[x][y] == 0)) {
+            m[x][y] = idx;
+            y++;
+            idx++;
+        }
+        y--;
+    }
 public:
     vector<vector<int>> generateMatrix(int n) {
-        // var
-        int i = 0;
-        int j = 0;
-        int up = 0;
-        int down = n - 1;
-        int left = 0;
-        int right = n - 1;
-        int direction = 0;
-        
-        // init
-        vector<vector<int>> r(n, vector<int>(n, 0));
-        
-        for (int k = 1; k <= n * n; k++) {
-            r[i][j] = k;
-            switch(direction) {
-                // right
-                case 0:
-                    if (j < right)
-                        j++;
-                    else {
-                        up++;
-                        i++;
-                        direction = 1;
-                    }
-                    break;
-                // down
-                case 1:
-                    if (i < down)
-                        i++;
-                    else {
-                        right--;
-                        j--;
-                        direction = 2;
-                    }
-                    break;
-                // left
-                case 2:
-                    if (j > left)
-                        j--;
-                    else {
-                        down--;
-                        i--;
-                        direction = 3;
-                    }
-                    break;
-                // up
-                case 3:
-                    if (i > up)
-                        i--;
-                    else {
-                        left++;
-                        j++;
-                        direction = 0;
-                    }
-                    break;
-            }
+        vector<vector<int>> ret(n, vector<int>(n, 0));
+
+        while (idx <= n * n) {
+            right(ret);
+            down(ret);
+            left(ret);
+            up(ret);
         }
-        return r;
+
+        return ret;
     }
 };
