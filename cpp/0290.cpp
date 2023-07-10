@@ -1,43 +1,35 @@
 class Solution {
 public:
-    bool wordPattern(string pattern, string str) {
-        // var
-        map<string, char> m;
-        vector<string> v(26, "");
-        vector<string> strs = split(str);
-        
-        // invalid input
-        if (pattern.length() != strs.size())
+    bool wordPattern(string pattern, string s) {
+        vector<string> words;
+        unordered_map<char, string> fmap;
+        unordered_map<string, char> bmap;
+
+        for (int i = 0; i < s.length(); ) {
+            int j = i + 1;
+            for (; (j < s.length()) && (s[j] != ' '); j++);
+            words.push_back(s.substr(i, j - i));
+            i = j + 1;
+        }
+        if (pattern.length() != words.size()) {
             return false;
-        
-        // run
+        }
         for (int i = 0; i < pattern.length(); i++) {
-            if (v[pattern[i] - 'a'] == "") {
-                if (m.find(strs[i]) == m.end()) {
-                    v[pattern[i] - 'a'] = strs[i];
-                    m[strs[i]] = pattern[i];
-                }
-                else
-                    return false;
-            }
-            else if (v[pattern[i] - 'a'] != strs[i])
+            bool f = fmap.find(pattern[i]) == fmap.end();
+            bool b = bmap.find(words[i]) == bmap.end();
+
+            if (f && b) {
+                fmap[pattern[i]] = words[i];
+                bmap[words[i]] = pattern[i];
+            } else if (!f && !b 
+                && (fmap[pattern[i]] == words[i]) 
+                && (pattern[i] == bmap[words[i]])) {
+                continue;
+            } else {
                 return false;
+            }
         }
+
         return true;
-    }
-    
-    vector<string> split(string str) {
-        // var
-        string tmp;
-        stringstream ss(str);
-        vector<string> result;
-        
-        while (ss >> tmp) {
-            result.push_back(tmp);
-            
-            if (ss.peek() == ' ')
-                ss.ignore();
-        }
-        return result;
     }
 };
