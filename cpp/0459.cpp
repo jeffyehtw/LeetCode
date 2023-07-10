@@ -1,22 +1,25 @@
 class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
-        for (int i = 1; i <= s.length() / 2; i++) {
-            if (s.length() % i != 0)
+        int n = s.length();
+
+        for (int i = 1; i <= n / 2; i++) {
+            int idx = i;
+            string cur = s.substr(0, i);
+
+            if (n % cur.length() != 0) {
                 continue;
-            
-            // var
-            bool ok = true;
-            string tmp = s.substr(0, i);
-        
-            for (int j = i; j < s.length() && ok; j += i) {
-                if (tmp != s.substr(j, i))
-                    ok = false;
             }
-            
-            if (ok)
+            for (; idx < n; idx += cur.length()) {
+                if (cur != s.substr(idx, cur.length())) {
+                    break;
+                }
+            }
+            if (idx == s.length()) {
                 return true;
+            }
         }
+
         return false;
     }
 };
