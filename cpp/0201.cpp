@@ -1,12 +1,30 @@
 class Solution {
-public:
-    int rangeBitwiseAnd(int m, int n) {
-        // var
-        int mask = INT_MAX;
+private:
+    int len(int val) {
+        int ret = 0;
         
-        while ((m & mask) != (n & mask))
-            mask <<= 1;
-            
-        return m & mask;
+        while (val) {
+            ret++;
+            val >>= 1;
+        }
+
+        return ret;
+    }
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        int length;
+
+        if (left == right) {
+            return left;
+        } else if (left + 1 == right) {
+            return left & right;
+        }
+
+        length = len(right - left);
+        left >>= length;
+        left <<= length;
+        left &= right;
+        
+        return left;
     }
 };
