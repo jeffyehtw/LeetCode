@@ -1,44 +1,49 @@
+#define HALF_DAY 720
+
 class Solution {
+private:
+    int count(unsigned int hour, unsigned int min) {
+        int ret = 0;
+
+        while (hour > 0) {
+            ret += (hour & 1);
+            hour >>= 1;
+        }
+        while (min > 0) {
+            ret += (min & 1);
+            min >>= 1;
+        }
+
+        return ret;
+    }
 public:
-    vector<string> readBinaryWatch(int num) {
-        // var
-        vector<string> hours[5];
-        vector<string> mins[7];
-        vector<string> result;
+    vector<string> readBinaryWatch(int turnedOn) {
+        unsigned int hour = 0;
+        unsigned int min = 0;
+        unsigned int sec = 0;
+        vector<string> ret;
         
-        // init
-        for (int i = 0; i < 12; i++)
-            hours[count_bits(i)].push_back(format(to_string(i), 1));
-        for (int i = 0; i < 60; i++)
-            mins[count_bits(i)].push_back(format(to_string(i), 2));
-        
-        // run
-        for (int i = 0; i <= min(4, num); i++) {
-            for (int j = 0; j < hours[i].size(); j++) {
-                // out of range
-                if (num - i < 0 || num - i > 6)
-                    continue;
-                // add
-                for (int k = 0; k < mins[num - i].size(); k++)
-                    result.push_back(hours[i][j] + ":" + mins[num - i][k]);
+        if (turnedOn == 0) {
+            ret.push_back("0:00");
+            return ret;
+        }
+
+        while (hour * 60 + min < HALF_DAY) {
+            hour += min / 60;
+            min %= 60;
+
+            if (count(hour, min) == turnedOn) {
+                string h = to_string(hour);
+                string m = to_string(min);
+
+                if (m.length() < 2) {
+                    m = "0" + m;
+                }
+                ret.push_back(h + ":" + m);
             }
+            min++;
         }
-        return result;
-    }
-    
-    int count_bits(int num) {
-        // var
-        int count = 0;
-        while (num) {
-            count += num % 2;
-            num >>= 1;
-        }
-        return count;
-    }
-    
-    string format(string min, int len) {
-        while (min.length() < len)
-            min = '0' + min;
-        return min;
+
+        return ret;
     }
 };
