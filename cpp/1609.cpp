@@ -16,22 +16,25 @@ private:
     void traverse(TreeNode* root, int level) {
         if ((root == NULL) || !valid) {
             return;
-        } else if (level % 2 != root->val % 2) {
+        }
+
+        if ((level % 2) == (root->val % 2)) {
             valid = false;
             return;
         }
-        if (level > levels.size()) {
-            levels.push_back(root->val);         
+
+        if (level >= levels.size()) {
+            levels.push_back(root->val);
         } else {
             if (level % 2 == 0) {
-                if (root->val < levels[level - 1]) {
-                    levels[level - 1] = root->val;
+                if (root->val > levels[level]) {
+                    levels[level] = root->val;
                 } else {
                     valid = false;
                 }
             } else {
-                if (root->val > levels[level - 1]) {
-                    levels[level - 1] = root->val;
+                if (root->val < levels[level]) {
+                    levels[level] = root->val;
                 } else {
                     valid = false;
                 }
@@ -42,10 +45,7 @@ private:
     }
 public:
     bool isEvenOddTree(TreeNode* root) {
-        traverse(root, 1);
-        for (int i = 0; i < levels.size(); i++) {
-            cout << levels[i] << endl;
-        }
+        traverse(root, 0);
         return valid;
     }
 };
