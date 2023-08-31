@@ -1,26 +1,21 @@
 class Solution {
 public:
     vector<int> findErrorNums(vector<int>& nums) {
-        // var
-        int missing;
-        int duplicate;
-        int n = nums.size();
-        map<int, bool> mapping;
-        
-        for (int i = 0; i < n; i++) {
-            if (mapping[nums[i]]) {
-                duplicate = nums[i];
-            }
-            else {
-                mapping[nums[i]] = true;
+        int all = 0;
+        unordered_map<int, int> umap;
+        vector<int> ret(2, 0);
+
+        for (int i = 0; i < nums.size(); i++) {
+            all ^= nums[i];
+            all ^= i + 1;
+            if (umap.find(nums[i]) != umap.end()) {
+                ret[0] = nums[i];
+            } else {
+                umap[nums[i]] = i;
             }
         }
-        
-        for (int i = 0; i < n; i++) {
-            if (!mapping[i + 1])
-                missing = i + 1;
-        }
-        
-        return vector<int>({duplicate, missing});
+        ret[1] = all ^ ret[0];
+
+        return ret;
     }
 };
